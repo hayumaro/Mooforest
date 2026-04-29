@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="Mooforest.Features.WorkHour.WorkHourView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Mooforest.Features.WorkHour"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="BeginButtonColor" Color="#25b7c0"/>
+        <SolidColorBrush x:Key="EndButtonColor" Color="#ea618e"/>
+        <SolidColorBrush x:Key="StatusTextColor" Color="#999" />
+
+        <Style TargetType="TextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border CornerRadius="4" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" x:Name="InputAndShortcuts">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" x:Name="Input">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="作業名"/>
+                <TextBox Grid.Row="0" Grid.Column="2" x:Name="WorkContent" FontSize="15" Height="32" Width="240"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="作業区分"/>
+                <ComboBox Grid.Row="2" Grid.Column="2" x:Name="CmbWorkCases" ItemsSource="{Binding WorkCases}"/>
+                <Button Grid.Row="4" Grid.Column="2" x:Name="RecordButton" Content="▶" FontSize="18" Height="40" Click="RecordButton_Click" Background="{StaticResource BeginButtonColor}"/>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="よく使う項目"/>
+                <WrapPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button Content="事務" Click="ShortcutButtons_Click"/>
+                    <Button Content="部会" Click="ShortcutButtons_Click"/>
+                    <Button Content="PC" Click="ShortcutButtons_Click"/>
+                    <Button Content="点検" Click="ShortcutButtons_Click"/>
+                    <Button Content="問い合わせ" Click="ShortcutButtons_Click"/>
+                </WrapPanel>
+            </Grid>
+        </Grid>
+        <StackPanel Grid.Row="2" x:Name="PnlWorks" Orientation="Vertical">
+            <TextBlock Text="工数一覧"/>
+            <ListView ItemsSource="{Binding Works}" Margin="0,8,0,8">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="内容" DisplayMemberBinding="{Binding Content}" Width="140"/>
+                        <GridViewColumn Header="区分" DisplayMemberBinding="{Binding Case}" Width="140"/>
+                        <GridViewColumn Header="開始" DisplayMemberBinding="{Binding Begin, StringFormat=HH:mm}" Width="70"/>
+                        <GridViewColumn Header="終了" DisplayMemberBinding="{Binding End, StringFormat=HH:mm}" Width="70"/>
+                        <GridViewColumn Header="工数" DisplayMemberBinding="{Binding Hour, StringFormat=hh\\:mm}" Width="60"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+        <Border Grid.Row="3" x:Name="StatusBar" Background="#10000000" Padding="6" CornerRadius="6">
+            <TextBlock x:Name="StatusText" Foreground="{StaticResource StatusTextColor}"/>
+        </Border>
+    </Grid>
+</UserControl>

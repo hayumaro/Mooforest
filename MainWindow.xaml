@@ -5,8 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mooforest"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="720" Width="1440" WindowStartupLocation="CenterScreen"
+        FontFamily="Noto Sans JP DemiLight">
+    <Window.Resources>
+        <SolidColorBrush x:Key="AccentColor" Color="#006948"/>
+        <SolidColorBrush x:Key="BackgroundColor" Color="#f7f7fa"/>
+    </Window.Resources>
+    <Grid Background="{StaticResource BackgroundColor}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="48" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="#10000000">
+            <ListView x:Name="Menu" SelectionChanged="Menu_SelectionChanged" Background="Transparent" BorderThickness="0">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="Foreground" Value="{StaticResource AccentColor}"/>
+                        <!-- テンプレート差し替え -->
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Border x:Name="Bd" Background="Transparent" CornerRadius="4" Margin="0,4,0,4" Padding="0,4,0,4">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="#20000000"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="#20000000"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
 
+                <ListViewItem Tag="WorkHour" Content="⏳"/>
+                <ListViewItem Tag="IssueManagement" Content="🗒️"/>
+                <ListViewItem Tag="Schedule" Content="📅"/>
+                <ListViewItem Tag="ToDo" Content="➡️"/>
+            </ListView>
+        </Grid>
+
+        <!-- 機能画面 -->
+        <Border Grid.Column="1" Padding="16">
+            <ContentControl x:Name="FeatureView"/>
+        </Border>
     </Grid>
 </Window>

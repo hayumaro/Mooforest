@@ -1,21 +1,21 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Mooforest {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
+        }
+
+        private void Menu_SelectionChanged(object sender, SelectionChangedEventArgs args) {
+            var tag = ((ListViewItem)Menu.SelectedItem).Tag;
+            switch (tag) {
+                case "WorkHour":
+                    FeatureView.Content = new Features.WorkHour.WorkHourView();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
