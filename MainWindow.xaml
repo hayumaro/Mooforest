@@ -8,8 +8,6 @@
         Title="MainWindow" Height="720" Width="1440" WindowStartupLocation="CenterScreen"
         FontFamily="Noto Sans JP DemiLight">
     <Window.Resources>
-        <SolidColorBrush x:Key="AccentColor" Color="#006948"/>
-        <SolidColorBrush x:Key="BackgroundColor" Color="#f7f7fa"/>
     </Window.Resources>
     <Grid Background="{StaticResource BackgroundColor}">
         <Grid.ColumnDefinitions>

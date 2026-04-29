@@ -10,18 +10,6 @@
         <SolidColorBrush x:Key="BeginButtonColor" Color="#25b7c0"/>
         <SolidColorBrush x:Key="EndButtonColor" Color="#ea618e"/>
         <SolidColorBrush x:Key="StatusTextColor" Color="#999" />
-
-        <Style TargetType="TextBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border CornerRadius="4" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                            <ScrollViewer x:Name="PART_ContentHost"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -53,7 +41,7 @@
                 <TextBox Grid.Row="0" Grid.Column="2" x:Name="WorkContent" FontSize="15" Height="32" Width="240"/>
                 <Label Grid.Row="2" Grid.Column="0" Content="作業区分"/>
                 <ComboBox Grid.Row="2" Grid.Column="2" x:Name="CmbWorkCases" ItemsSource="{Binding WorkCases}"/>
-                <Button Grid.Row="4" Grid.Column="2" x:Name="RecordButton" Content="▶" FontSize="18" Height="40" Click="RecordButton_Click" Background="{StaticResource BeginButtonColor}"/>
+                <Button Grid.Row="4" Grid.Column="2" Style="{StaticResource GeneralButton}" x:Name="RecordButton" Content="▶" FontSize="18" Height="40" Click="RecordButton_Click"/>
             </Grid>
             <Grid Grid.Column="2">
                 <Grid.ColumnDefinitions>
