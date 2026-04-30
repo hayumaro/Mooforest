@@ -10,7 +10,11 @@ namespace Mooforest {
         private void Menu_SelectionChanged(object sender, SelectionChangedEventArgs args) {
             var tag = ((ListViewItem)Menu.SelectedItem).Tag;
             switch (tag) {
-                case "ToDo":
+                case "IssueManagement":
+                    break;
+                case "Schedule":
+                    break;
+                case "Memo":
                     break;
                 default:
                     break;

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Mooforest"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1440" WindowStartupLocation="CenterScreen"
-        FontFamily="Meiryo UI">
+        FontFamily="Noto Sans JP">
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="48"/>
@@ -38,9 +38,9 @@
                     </Style>
                 </ListView.ItemContainerStyle>
 
-                <ListViewItem Tag="IssueManagement" Content="🗒️"/>
+                <ListViewItem Tag="IssueManagement" Content="📓"/>
                 <ListViewItem Tag="Schedule" Content="📅"/>
-                <ListViewItem Tag="ToDo" Content="➡️"/>
+                <ListViewItem Tag="Memo" Content="🗒️"/>
             </ListView>
         </Grid>
 
