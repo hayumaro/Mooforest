@@ -85,6 +85,8 @@
 
     <!-- TextBox -->
     <Style TargetType="TextBox">
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
@@ -92,8 +94,7 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{StaticResource BrushGray600}"
                             BorderThickness="1"
-                            CornerRadius="4"
-                            VerticalAlignment="Center">
+                            CornerRadius="4">
                         <ScrollViewer x:Name="PART_ContentHost"/>
                     </Border>
                 </ControlTemplate>
@@ -104,10 +105,11 @@
     <!-- Button -->
     <Style x:Key="Button_Primary" TargetType="Button">
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                    <Border BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
@@ -116,12 +118,54 @@
     </Style>
     <Style x:Key="Button_Secondary" TargetType="Button">
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border BorderThickness="1" Background="White" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                    <Border BorderThickness="1" Background="White" CornerRadius="4"
+                            Padding="{TemplateBinding Padding}"
+                            BorderBrush="{TemplateBinding BorderBrush}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Button_LinkStyle" TargetType="Button">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <TextBlock Text="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextDecorations">
+                                    <Setter.Value>
+                                        <TextDecorationCollection>
+                                            <TextDecoration Location="Underline"/>
+                                        </TextDecorationCollection>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                                        <Setter Property="TextDecorations">
+                                            <Setter.Value>
+                                                <TextDecorationCollection>
+                                                    <TextDecoration Location="Underline">
+                                                        <TextDecoration.Pen>
+                                                            <Pen Thickness="3" Brush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+                                                        </TextDecoration.Pen>
+                                                    </TextDecoration>
+                                                </TextDecorationCollection>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

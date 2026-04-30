@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Mooforest"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1440" WindowStartupLocation="CenterScreen"
-        FontFamily="Noto Sans JP">
+        FontFamily="LINE SEED JP"
+        FontSize="14">
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="48"/>
