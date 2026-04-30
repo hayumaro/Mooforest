@@ -1,56 +1,126 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="BackgroundColor" Color="#f7f7fa"/>
-    <SolidColorBrush x:Key="AccentColor" Color="#3cb37a"/>
-    <SolidColorBrush x:Key="PaleAccentColor" Color="#a4d5bd"/>
+    <!-- Colors And Brushes -->
+    <!-- Green -->
+    <Color x:Key="Green50">#e6f5ec</Color>
+    <Color x:Key="Green100">#c2e5d1</Color>
+    <Color x:Key="Green200">#98d4b5</Color>
+    <Color x:Key="Green300">#71c598</Color>
+    <Color x:Key="Green400">#51b883</Color>
+    <Color x:Key="Green500">#2cac6e</Color>
+    <Color x:Key="Green600">#259d63</Color>
+    <Color x:Key="Green700">#1d8b56</Color>
+    <Color x:Key="Green800">#197a4b</Color>
+    <Color x:Key="Green900">#115a36</Color>
+    <Color x:Key="Green1000">#0c472a</Color>
+    <Color x:Key="Green1100">#08351f</Color>
+    <Color x:Key="Green1200">#032213</Color>
+    <SolidColorBrush x:Key="BrushGreen50" Color="{StaticResource Green50}"/>
+    <SolidColorBrush x:Key="BrushGreen100" Color="{StaticResource Green100}"/>
+    <SolidColorBrush x:Key="BrushGreen200" Color="{StaticResource Green200}"/>
+    <SolidColorBrush x:Key="BrushGreen300" Color="{StaticResource Green300}"/>
+    <SolidColorBrush x:Key="BrushGreen400" Color="{StaticResource Green400}"/>
+    <SolidColorBrush x:Key="BrushGreen500" Color="{StaticResource Green500}"/>
+    <SolidColorBrush x:Key="BrushGreen600" Color="{StaticResource Green600}"/>
+    <SolidColorBrush x:Key="BrushGreen700" Color="{StaticResource Green700}"/>
+    <SolidColorBrush x:Key="BrushGreen800" Color="{StaticResource Green800}"/>
+    <SolidColorBrush x:Key="BrushGreen900" Color="{StaticResource Green900}"/>
+    <SolidColorBrush x:Key="BrushGreen1000" Color="{StaticResource Green1000}"/>
+    <SolidColorBrush x:Key="BrushGreen1100" Color="{StaticResource Green1100}"/>
+    <SolidColorBrush x:Key="BrushGreen1200" Color="{StaticResource Green1200}"/>
 
-    <!-- General Button -->
-    <Style x:Key="GeneralButton"  TargetType="Button">
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Foreground" Value="{StaticResource AccentColor}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border BorderBrush="{StaticResource AccentColor}"
-                            Background="{StaticResource PaleAccentColor}"
-                            CornerRadius="20" Padding="{TemplateBinding Padding}">
-                        <Border.Effect>
-                            <DropShadowEffect ShadowDepth="1" Opacity="0.5" Color="#a4d5bd"/>
-                        </Border.Effect>
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+    <!-- Cyan -->
+    <Color x:Key="Cyan50">#e6fcef</Color>
+    <Color x:Key="Cyan100">#c8f8ff</Color>
+    <Color x:Key="Cyan200">#99f2ff</Color>
+    <Color x:Key="Cyan300">#79e2f2</Color>
+    <Color x:Key="Cyan400">#2bc8e4</Color>
+    <Color x:Key="Cyan500">#01b7d6</Color>
+    <Color x:Key="Cyan600">#00a3bf</Color>
+    <Color x:Key="Cyan700">#008da6</Color>
+    <Color x:Key="Cyan800">#008299</Color>
+    <Color x:Key="Cyan900">#006f83</Color>
+    <Color x:Key="Cyan1000">#006173</Color>
+    <Color x:Key="Cyan1100">#004c59</Color>
+    <Color x:Key="Cyan1200">#003741</Color>
+    <SolidColorBrush x:Key="BrushCyan50" Color="{StaticResource Cyan50}"/>
+    <SolidColorBrush x:Key="BrushCyan100" Color="{StaticResource Cyan100}"/>
+    <SolidColorBrush x:Key="BrushCyan200" Color="{StaticResource Cyan200}"/>
+    <SolidColorBrush x:Key="BrushCyan300" Color="{StaticResource Cyan300}"/>
+    <SolidColorBrush x:Key="BrushCyan400" Color="{StaticResource Cyan400}"/>
+    <SolidColorBrush x:Key="BrushCyan500" Color="{StaticResource Cyan500}"/>
+    <SolidColorBrush x:Key="BrushCyan600" Color="{StaticResource Cyan600}"/>
+    <SolidColorBrush x:Key="BrushCyan700" Color="{StaticResource Cyan700}"/>
+    <SolidColorBrush x:Key="BrushCyan800" Color="{StaticResource Cyan800}"/>
+    <SolidColorBrush x:Key="BrushCyan900" Color="{StaticResource Cyan900}"/>
+    <SolidColorBrush x:Key="BrushCyan1000" Color="{StaticResource Cyan1000}"/>
+    <SolidColorBrush x:Key="BrushCyan1100" Color="{StaticResource Cyan1100}"/>
+    <SolidColorBrush x:Key="BrushCyan1200" Color="{StaticResource Cyan1200}"/>
 
-
-    <!-- 角丸Button -->
-    <Style TargetType="Button">
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" CornerRadius="20" Padding="{TemplateBinding Padding}">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+    <!-- Gray -->
+    <Color x:Key="Gray50">#f2f2f2</Color>
+    <Color x:Key="Gray100">#e6e6e6</Color>
+    <Color x:Key="Gray200">#ccc</Color>
+    <Color x:Key="Gray300">#b3b3b3</Color>
+    <Color x:Key="Gray400">#999</Color>
+    <Color x:Key="Gray420">#949494</Color>
+    <Color x:Key="Gray500">#7f7f7f</Color>
+    <Color x:Key="Gray536">#767676</Color>
+    <Color x:Key="Gray600">#666</Color>
+    <Color x:Key="Gray700">#4d4d4d</Color>
+    <Color x:Key="Gray800">#333</Color>
+    <Color x:Key="Gray900">#1a1a1a</Color>
+    <SolidColorBrush x:Key="BrushGray50" Color="{StaticResource Gray50}"/>
+    <SolidColorBrush x:Key="BrushGray100" Color="{StaticResource Gray100}"/>
+    <SolidColorBrush x:Key="BrushGray200" Color="{StaticResource Gray200}"/>
+    <SolidColorBrush x:Key="BrushGray300" Color="{StaticResource Gray300}"/>
+    <SolidColorBrush x:Key="BrushGray400" Color="{StaticResource Gray400}"/>
+    <SolidColorBrush x:Key="BrushGray420" Color="{StaticResource Gray420}"/>
+    <SolidColorBrush x:Key="BrushGray500" Color="{StaticResource Gray500}"/>
+    <SolidColorBrush x:Key="BrushGray536" Color="{StaticResource Gray536}"/>
+    <SolidColorBrush x:Key="BrushGray600" Color="{StaticResource Gray600}"/>
+    <SolidColorBrush x:Key="BrushGray700" Color="{StaticResource Gray700}"/>
+    <SolidColorBrush x:Key="BrushGray800" Color="{StaticResource Gray800}"/>
+    <SolidColorBrush x:Key="BrushGray900" Color="{StaticResource Gray900}"/>
 
     <!-- TextBox -->
     <Style TargetType="TextBox">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <Border CornerRadius="4" BorderBrush="{StaticResource AccentColor}" BorderThickness="1"
+                    <Border x:Name="TextBox_Border"
                             Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource BrushGray600}"
+                            BorderThickness="1"
+                            CornerRadius="4"
                             VerticalAlignment="Center">
-                        <Border.Effect>
-                            <DropShadowEffect ShadowDepth="1" Color="#a4d5bd"/>
-                        </Border.Effect>
                         <ScrollViewer x:Name="PART_ContentHost"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Button -->
+    <Style x:Key="Button_Primary" TargetType="Button">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Button_Secondary" TargetType="Button">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="1" Background="White" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -62,18 +132,17 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
-                    <Border CornerRadius="4" BorderBrush="{StaticResource AccentColor}" BorderThickness="1" Background="#fff">
-                        <Border.Effect>
-                            <DropShadowEffect ShadowDepth="1" Color="#a4d5bd"/>
-                        </Border.Effect>
+                    <Border CornerRadius="4"
+                            BorderBrush="{StaticResource BorderColor}"
+                            BorderThickness="1"
+                            Background="White">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="30"/>
                             </Grid.ColumnDefinitions>
                             <ContentPresenter Margin="5,0,0,0" VerticalAlignment="Center"/>
-                            <Border Grid.Column="1" Background="{StaticResource PaleAccentColor}" CornerRadius="0,3,3,0"/>
-                            <ToggleButton Grid.Column="1" Content="▼" BorderThickness="0" Foreground="{StaticResource AccentColor}" Background="transparent"/>
+                            <ToggleButton Grid.Column="1" Content="▼" BorderThickness="0" Background="Transparent"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

@@ -6,33 +6,30 @@
         xmlns:local="clr-namespace:Mooforest"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1440" WindowStartupLocation="CenterScreen"
-        FontFamily="Noto Sans JP DemiLight">
-    <Window.Resources>
-    </Window.Resources>
-    <Grid Background="{StaticResource BackgroundColor}">
+        FontFamily="Meiryo UI">
+    <Grid Background="White">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="48" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="48"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="#10000000">
+        <Grid Grid.Column="0" Background="White">
             <ListView x:Name="Menu" SelectionChanged="Menu_SelectionChanged" Background="Transparent" BorderThickness="0">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="FontSize" Value="20"/>
-                        <Setter Property="Foreground" Value="{StaticResource AccentColor}"/>
-                        <!-- テンプレート差し替え -->
+                        <Setter Property="Foreground" Value="{StaticResource BrushGray800}"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListViewItem">
-                                    <Border x:Name="Bd" Background="Transparent" CornerRadius="4" Margin="0,4,0,4" Padding="0,4,0,4">
+                                    <Border x:Name="Menu_Border" Background="Transparent" Padding="0,8,0,8" BorderBrush="{StaticResource BrushGray800}">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="Bd" Property="Background" Value="#20000000"/>
+                                            <Setter TargetName="Menu_Border" Property="BorderThickness" Value="4,0,0,0"/>
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Bd" Property="Background" Value="#20000000"/>
+                                            <Setter TargetName="Menu_Border" Property="Background" Value="{StaticResource BrushGray200}"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -41,7 +38,6 @@
                     </Style>
                 </ListView.ItemContainerStyle>
 
-                <ListViewItem Tag="WorkHour" Content="⏳"/>
                 <ListViewItem Tag="IssueManagement" Content="🗒️"/>
                 <ListViewItem Tag="Schedule" Content="📅"/>
                 <ListViewItem Tag="ToDo" Content="➡️"/>

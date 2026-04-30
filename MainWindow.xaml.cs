@@ -10,8 +10,7 @@ namespace Mooforest {
         private void Menu_SelectionChanged(object sender, SelectionChangedEventArgs args) {
             var tag = ((ListViewItem)Menu.SelectedItem).Tag;
             switch (tag) {
-                case "WorkHour":
-                    FeatureView.Content = new Features.WorkHour.WorkHourView();
+                case "ToDo":
                     break;
                 default:
                     break;
