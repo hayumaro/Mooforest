@@ -31,8 +31,7 @@ namespace Mooforest.Features.IssueManagement {
                 MessageBox.Show("次にやることを書いてください");
                 return;
             }
-            IssueManagementModel.InsertHistory(OwnIssue.Id, status.Id, InputDescription.Text);
-            IssueManagementModel.UpdateIssue(OwnIssue.Id, OwnIssue.Title, OwnIssue.Description, status.Id, InputToDo.Text);
+            IssueManagementModel.AddHistory(OwnIssue, status, InputDescription.Text, InputToDo.Text);
             Close();
         }
     }

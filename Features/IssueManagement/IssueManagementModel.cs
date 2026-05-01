@@ -1,6 +1,8 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Globalization;
+using System.Windows.Input;
 
 namespace Mooforest.Features.IssueManagement {
 	public record Status(int Id, string Name, int SortOrder, bool IsClosed);
@@ -20,6 +22,12 @@ namespace Mooforest.Features.IssueManagement {
 	public record History(int Id, int IssueId, DateTime CreatedAt, int StatusId, string Status, string Description);
 
 	public class IssueManagementModel {
+        private static string FilePath { get; } = System.IO.Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+            "Mooforest",
+            "IssueManagement.db");
+        private static readonly string DataSource = $"Data Source = {FilePath}";
+
 		// Caches of Master
         public static ObservableCollection<Status> Statuses { get; private set; } = [];
         public static ObservableCollection<Category> Categories { get; private set; } = [];
@@ -128,56 +136,106 @@ namespace Mooforest.Features.IssueManagement {
             cmd.ExecuteNonQuery();
         }
 
+        // 対応を追加する
+        public static void AddHistory(Issue issue, Status status, string description, string toDo) {
+            using var con = new SqliteConnection(DataSource);
+            con.Open();
+            using var cmd = new SqliteCommand();
+            cmd.Connection = con;
+
+            // Insert History
+            BuildInsertHistory(cmd, issue.Id, status.Id, description);
+            cmd.Transaction = con.BeginTransaction();
+            try {
+                cmd.ExecuteNonQuery();
+            } catch (Exception) {
+                cmd.Transaction.Rollback();
+                throw;
+            }
+            cmd.Parameters.Clear();
+
+            // Update Issue
+            BuildUpdateIssue(cmd, issue.Id, issue.Title, issue.Description, status.Id, toDo);
+            try {
+                cmd.ExecuteNonQuery();
+            } catch (Exception) {
+                cmd.Transaction.Rollback();
+                throw;
+            }
+            cmd.Transaction.Commit();
+        }
+
         public static void UpdateIssue(int issueId, string title, string description, int statusId, string toDo) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
-            using var cmd = new SqliteCommand(@"Update Issues
+            using var cmd = new SqliteCommand();
+            cmd.Connection = con;
+
+            BuildUpdateIssue(cmd, issueId, title, description, statusId, toDo);
+            cmd.ExecuteNonQuery();
+        }
+
+        private static void BuildUpdateIssue(SqliteCommand cmd, int issueId, string title, string description, int statusId, string toDo) {
+            cmd.CommandText = @"
+                Update Issues
 				Set Title=@Title, Description=@Description, StatusId=@StatusId, UpdatedAt=@UpdatedAt, ToDo=@ToDo
-				Where Id=@Id", con);
+				Where Id=@Id";
             cmd.Parameters.AddWithValue("@Title", title);
             cmd.Parameters.AddWithValue("@Description", description);
             cmd.Parameters.AddWithValue("@StatusId", statusId);
             cmd.Parameters.AddWithValue("@UpdatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
             cmd.Parameters.AddWithValue("@ToDo", toDo);
             cmd.Parameters.AddWithValue("@Id", issueId);
-            cmd.ExecuteNonQuery();
+
         }
 
-        public static void InsertHistory(int issueId, int statusId, string description) {
-            using var con = new SqliteConnection(DataSource);
-            con.Open();
-            using var cmd = new SqliteCommand(@"Insert Into Histories (IssueId, CreatedAt, Description, StatusId)
-				Values(@IssueId, @CreatedAt, @Description, @StatusId)", con);
+        private static void BuildInsertHistory(SqliteCommand cmd, int issueId, int statusId, string description) {
+            cmd.CommandText = @"
+                Insert Into Histories (IssueId, CreatedAt, Description, StatusId)
+                Values(@IssueId, @CreatedAt, @Description, @StatusId)";
 			cmd.Parameters.AddWithValue("@IssueId", issueId);
             cmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
             cmd.Parameters.AddWithValue("@Description", description);
             cmd.Parameters.AddWithValue("@StatusId", statusId);
-            cmd.ExecuteNonQuery();
         }
-
-        private static string FilePath { get; } = System.IO.Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-            "Mooforest",
-            "IssueManagement.db");
-        private static readonly string DataSource = $"Data Source = {FilePath}";
 
         private static void CreateTable(SqliteConnection con) {
 			// Statuses
-			{
-				using var cmd = new SqliteCommand(@"Create Table If Not Exists
-                ""Statuses"" (
+			using var cmd = new SqliteCommand(@"Create Table If Not Exists
+            ""Statuses"" (
+	            ""Id""	INTEGER,
+	            ""Name""	TEXT NOT NULL UNIQUE,
+	            ""SortOrder""	INTEGER NOT NULL UNIQUE,
+	            ""IsClosed""	INTEGER NOT NULL,
+	            PRIMARY KEY(""Id"")
+            );", con);
+            cmd.Transaction = con.BeginTransaction();
+            try {
+                cmd.ExecuteNonQuery();
+            } catch (Exception) {
+                cmd.Transaction.Rollback();
+                throw;
+            }
+            cmd.Parameters.Clear();
+
+            // Categories
+            cmd.CommandText = @"Create Table If Not Exists
+                ""Categories"" (
 	                ""Id""	INTEGER,
 	                ""Name""	TEXT NOT NULL UNIQUE,
-	                ""SortOrder""	INTEGER NOT NULL UNIQUE,
-	                ""IsClosed""	INTEGER NOT NULL,
+	                ""Description""	TEXT,
 	                PRIMARY KEY(""Id"")
-                );", con);
-				cmd.ExecuteNonQuery();
-			}
+                );";
+            try {
+                cmd.ExecuteNonQuery();
+            } catch (Exception) {
+                cmd.Transaction.Rollback();
+                throw;
+            }
+            cmd.Parameters.Clear();
 
-			// Issues
-			{
-				using var cmd = new SqliteCommand(@"Create Table If Not Exists
+            // Issues
+            cmd.CommandText = @"Create Table If Not Exists
                 ""Issues"" (
 	                ""Id""	INTEGER,
 	                ""Title""	TEXT NOT NULL,
@@ -187,16 +245,22 @@ namespace Mooforest.Features.IssueManagement {
 	                ""UpdatedAt""	TEXT NOT NULL CHECK(""UpdatedAt"" GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
 	                ""ParentId""	INTEGER,
 	                ""ToDo""	TEXT,
+	                ""CategoryId""	INTEGER,
 	                PRIMARY KEY(""Id""),
+	                FOREIGN KEY(""CategoryId"") REFERENCES ""Categories""(""Id""),
 	                FOREIGN KEY(""ParentId"") REFERENCES ""Issues""(""Id""),
 	                FOREIGN KEY(""StatusId"") REFERENCES ""Statuses""(""Id"")
-                );", con);
-				cmd.ExecuteNonQuery();
-			}
+                );";
+            try {
+                cmd.ExecuteNonQuery();
+            } catch (Exception) {
+                cmd.Transaction.Rollback();
+                throw;
+            }
+            cmd.Parameters.Clear();
 
-			// Histories
-			{
-				using var cmd = new SqliteCommand(@"Create Table If Not Exists
+            // Histories
+            cmd.CommandText = @"Create Table If Not Exists
 				""Histories"" (
 					""Id""	INTEGER,
 					""IssueId""	INTEGER NOT NULL,
@@ -206,10 +270,15 @@ namespace Mooforest.Features.IssueManagement {
 					PRIMARY KEY(""Id""),
 					FOREIGN KEY(""IssueId"") REFERENCES ""Issues""(""Id""),
 					FOREIGN KEY(""StatusId"") REFERENCES ""Statuses""(""Id"")
-				);", con);
-				cmd.ExecuteNonQuery();
-			}
-		}
+				);";
+            try {
+                cmd.ExecuteNonQuery();
+            } catch (Exception) {
+                cmd.Transaction.Rollback();
+                throw;
+            }
+            cmd.Transaction.Commit();
+        }
 
         // Load Master DB
         private static void LoadStatuses(SqliteConnection con) {
@@ -224,6 +293,7 @@ namespace Mooforest.Features.IssueManagement {
                 Statuses.Add(new Status(id, name, sortOrder, isClosed));
 			}
 		}
+
         private static void LoadCategories(SqliteConnection con) {
             Categories.Clear();
             using var cmd = new SqliteCommand(@"Select Id, Name From Categories", con);
