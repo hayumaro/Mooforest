@@ -6,7 +6,7 @@ namespace Mooforest.Features.IssueManagement {
         public IssueManagementView() {
             InitializeComponent();
             IssueManagementModel.Initialize();
-            IssueManagementModel.LoadIssuesWithoutCloses();
+            IssueManagementModel.LoadIssuesWhereIsClosedEquals(false);
             DataContext = new IssueManagementModel();
         }
 
@@ -16,12 +16,11 @@ namespace Mooforest.Features.IssueManagement {
         }
 
         private void DisplayClosed_Checked(object sender, EventArgs e) {
-            if (sender is not CheckBox cb) return;
-            if (cb.IsChecked == true) {
-                IssueManagementModel.LoadIssues();
-            } else {
-                IssueManagementModel.LoadIssuesWithoutCloses();
-            }
+            IssueManagementModel.LoadIssuesWhereIsClosedEquals(true);
+        }
+
+        private void DisplayClosed_Unchecked(object sender, EventArgs e) {
+            IssueManagementModel.LoadIssuesWhereIsClosedEquals(false);
         }
 
         private void Title_Click(object sender, RoutedEventArgs e) {

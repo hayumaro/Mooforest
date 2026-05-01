@@ -28,16 +28,18 @@ namespace Mooforest.Features.IssueManagement {
             LoadIssues(con);
         }
 
-        public static void LoadIssuesWithoutCloses() {
+        public static void LoadIssuesWhereIsClosedEquals(bool isClosed) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
-            LoadIssuesWithoutCloses(con);
+            LoadIssuesWhereIsClosedEquals(con, isClosed);
         }
 
-        private static void LoadIssuesWithoutCloses(SqliteConnection con) {
+        private static void LoadIssuesWhereIsClosedEquals(SqliteConnection con, bool isClosed) {
+            Issues.Clear();
             using var cmd = new SqliteCommand(@"Select Issues.* From Issues
                 Inner Join Statuses On Issues.StatusId = Statuses.Id
-                Where Statuses.IsClosed = 0;", con);
+                Where Statuses.IsClosed = @IsClosed;", con);
+            cmd.Parameters.AddWithValue("@IsClosed", isClosed ? 1 : 0);
             using var reader = cmd.ExecuteReader();
             AddIssues(reader);
         }
@@ -71,7 +73,7 @@ namespace Mooforest.Features.IssueManagement {
             cmd.Parameters.AddWithValue("@UpdatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
             cmd.Parameters.AddWithValue("@ToDo", toDo);
             cmd.ExecuteNonQuery();
-            LoadIssuesWithoutCloses(con);
+            LoadIssuesWhereIsClosedEquals(con, false);
         }
 
         public static void UpdateIssue(int issueId, string title, string description, int statusId, string toDo) {
@@ -87,7 +89,7 @@ namespace Mooforest.Features.IssueManagement {
             cmd.Parameters.AddWithValue("@ToDo", toDo);
             cmd.Parameters.AddWithValue("@Id", issueId);
             cmd.ExecuteNonQuery();
-            LoadIssuesWithoutCloses(con);
+            LoadIssuesWhereIsClosedEquals(con, false);
         }
 
         public static void InsertHistory(int issueId, int statusId, string description) {
