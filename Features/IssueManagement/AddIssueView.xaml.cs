@@ -25,7 +25,6 @@ namespace Mooforest.Features.IssueManagement {
                 return;
             }
             IssueManagementModel.InsertIssue(InputTitle.Text, InputDescription.Text, InputToDo.Text, (int)InputCategory.SelectedValue);
-            MessageBox.Show("課題を登録しました");
             Close();
         }
     }
