@@ -1,22 +1,27 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Mooforest.Features.IssueManagement {
     public partial class IssueManagementView : UserControl {
-        public IssueManagementModel Model;
-
         public IssueManagementView() {
             InitializeComponent();
             IssueManagementModel.Initialize();
-            IssueManagementModel.LoadIssues();
-            Model = new IssueManagementModel();
-            DataContext = Model;
+            IssueManagementModel.LoadIssuesWithoutCloses();
+            DataContext = new IssueManagementModel();
         }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (sender is not DataGrid dg) return;
             dg.SelectedItem = null;
+        }
+
+        private void DisplayClosed_Checked(object sender, EventArgs e) {
+            if (sender is not CheckBox cb) return;
+            if (cb.IsChecked == true) {
+                IssueManagementModel.LoadIssues();
+            } else {
+                IssueManagementModel.LoadIssuesWithoutCloses();
+            }
         }
 
         private void Title_Click(object sender, RoutedEventArgs e) {

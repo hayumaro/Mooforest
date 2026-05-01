@@ -35,7 +35,7 @@ namespace Mooforest.Features.IssueManagement {
                 return;
             }
             IssueManagementModel.InsertHistory(TargetIssue.Id, status.Id, InputDescription.Text);
-            IssueManagementModel.UpdateToDo(TargetIssue.Id, InputToDo.Text);
+            IssueManagementModel.UpdateIssue(TargetIssue.Id, TargetIssue.Title, TargetIssue.Description, status.Id, InputToDo.Text);
             Close();
         }
     }
