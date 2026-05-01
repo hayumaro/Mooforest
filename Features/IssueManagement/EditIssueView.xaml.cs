@@ -9,6 +9,8 @@ namespace Mooforest.Features.IssueManagement {
             InitializeComponent();
             OwnIssue = issue;
             InitializeInputs();
+
+            Title += $"{OwnIssue.Title} ({OwnIssue.Id})";
         }
 
         private void InitializeInputs() {

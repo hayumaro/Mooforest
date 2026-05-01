@@ -5,16 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mooforest"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1440" WindowStartupLocation="CenterScreen"
-        FontFamily="LINE SEED JP"
-        FontSize="14">
-    <Grid Background="White">
+        Title="Mooforest" Height="720" Width="1440" WindowStartupLocation="CenterScreen">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="48"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="White">
-            <ListView x:Name="Menu" SelectionChanged="Menu_SelectionChanged" Background="Transparent" BorderThickness="0">
+        <Grid Grid.Column="0">
+            <ListView x:Name="Menu" SelectionChanged="Menu_SelectionChanged" BorderThickness="0">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="FontSize" Value="20"/>

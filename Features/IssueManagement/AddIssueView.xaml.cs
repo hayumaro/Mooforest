@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 
 namespace Mooforest.Features.IssueManagement {
     public partial class AddIssueView : Window {
@@ -7,7 +6,7 @@ namespace Mooforest.Features.IssueManagement {
             InitializeComponent();
         }
 
-        private void AddIssueButton_Click(object sender, RoutedEventArgs e) {
+        private void AddIssue_Click(object sender, RoutedEventArgs e) {
             if (string.IsNullOrWhiteSpace(InputTitle.Text)) {
                 MessageBox.Show("タイトルを入力してください");
                 return;

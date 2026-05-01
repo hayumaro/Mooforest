@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mooforest.Features.IssueManagement"
         mc:Ignorable="d"
-        Title="IssueDetailView" Height="720" Width="960" WindowStartupLocation="CenterScreen"
-        FontFamily="LINE SEED JP"
-        FontSize="14">
+        Title="{Binding OwnIssue.Title}" Height="720" Width="960" WindowStartupLocation="CenterScreen"
+        FontFamily="LINE Seed JP" FontSize="14">
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -16,14 +15,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <TextBlock Text="{Binding OwnIssue.Title}" FontSize="20" Padding="0,0,0,24" FontWeight="Bold"/>
-            <Button Style="{StaticResource Button_Secondary}" HorizontalAlignment="Right"
-                    Content="編集"
-                    Padding="16,0"
-                    Height="36"
-                    BorderBrush="{StaticResource BrushGreen800}"
-                    Foreground="{StaticResource BrushGreen800}"
-                    Click="Edit_Click"/>
+            <TextBlock Style="{StaticResource Header1}" Text="{Binding OwnIssue.Title}"/>
+            <Button Style="{StaticResource SecondaryButton}" HorizontalAlignment="Right" Content="編集" Padding="16,0" Click="Edit_Click"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -44,51 +37,33 @@
                 <ColumnDefinition Width="16"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="カテゴリー" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding OwnIssue.Category}" VerticalAlignment="Center"/>
-
-            <Label Grid.Row="2" Grid.Column="0" Content="ステータス" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding OwnIssue.Status}" VerticalAlignment="Center"/>
-
-            <Label Grid.Row="4" Grid.Column="0" Content="説明" FontWeight="Bold" VerticalAlignment="Top"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="カテゴリー"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding OwnIssue.Category}"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="ステータス"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding OwnIssue.Status}"/>
+            <Label Grid.Row="4" Grid.Column="0" Content="説明" VerticalAlignment="Top"/>
             <ScrollViewer Grid.Row="4" Grid.Column="2" VerticalScrollBarVisibility="Auto">
-                <TextBlock Text="{Binding OwnIssue.Description}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                <TextBlock Text="{Binding OwnIssue.Description}" VerticalAlignment="Top"/>
             </ScrollViewer>
-
-            <Label Grid.Row="6" Grid.Column="0" Content="次にやること" FontWeight="Bold"/>
-            <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding OwnIssue.ToDo}" TextWrapping="Wrap"/>
-
-            <Label Grid.Row="8" Grid.Column="0" Content="作成日" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="8" Grid.Column="2" Text="{Binding OwnIssue.CreatedAt, StringFormat=yyyy-MM-dd}" VerticalAlignment="Center"/>
-            <Label Grid.Row="10" Grid.Column="0" Content="更新日" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="10" Grid.Column="2" Text="{Binding OwnIssue.UpdatedAt, StringFormat=yyyy-MM-dd}" VerticalAlignment="Center"/>
-
+            <Label Grid.Row="6" Grid.Column="0" Content="次にやること"/>
+            <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding OwnIssue.ToDo}"/>
+            <Label Grid.Row="8" Grid.Column="0" Content="作成日"/>
+            <TextBlock Grid.Row="8" Grid.Column="2" Text="{Binding OwnIssue.CreatedAt, StringFormat=yyyy-MM-dd}"/>
+            <Label Grid.Row="10" Grid.Column="0" Content="更新日"/>
+            <TextBlock Grid.Row="10" Grid.Column="2" Text="{Binding OwnIssue.UpdatedAt, StringFormat=yyyy-MM-dd}"/>
         </Grid>
+
         <Grid Grid.Row="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="16"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <TextBlock Text="対応履歴" FontSize="16" Padding="0,16" FontWeight="Bold"/>
-                <Button Style="{StaticResource Button_Primary}" HorizontalAlignment="Right"
-                    Content="対応を追加する"
-                    Padding="16,0"
-                    Height="36"
-                    Background="{StaticResource BrushGreen800}"
-                    Click="AddHistory_Click"/>
+                <TextBlock Style="{StaticResource Header2}" Text="対応履歴"/>
+                <Button Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" Content="対応を追加する" Padding="16,0" Click="AddHistory_Click"/>
             </Grid>
-            <DataGrid Grid.Row="1" ItemsSource="{Binding Histories}"
-                AutoGenerateColumns="False"
-                HeadersVisibility="Column"
-                GridLinesVisibility="None"
-                RowHeaderWidth="0"
-                Background="{StaticResource BrushGray100}"
-                BorderThickness="1"
-                BorderBrush="{StaticResource BrushGray100}"
-                CanUserAddRows="False"
-                IsReadOnly="True">
-
+            <DataGrid Grid.Row="2" ItemsSource="{Binding Histories}">
                 <!-- なぜか知らないがマウスオーバーや行選択時の背景色をTriggersでうまく制御できないので、色を上書きする-->
                 <DataGrid.Resources>
                     <!-- 非アクティブ選択行（ウィンドウが非フォーカス時） -->
@@ -98,46 +73,6 @@
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="White"/>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{StaticResource Gray800}"/>
                 </DataGrid.Resources>
-
-                <!-- ヘッダー -->
-                <DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="Background" Value="{StaticResource BrushGray50}"/>
-                        <Setter Property="Foreground" Value="{StaticResource BrushGray800}"/>
-                        <Setter Property="FontWeight" Value="SemiBold"/>
-                        <Setter Property="FontSize" Value="14"/>
-                        <Setter Property="Padding" Value="8, 12"/>
-                        <Setter Property="BorderThickness" Value="0"/>
-                    </Style>
-                </DataGrid.ColumnHeaderStyle>
-
-                <!-- 行 -->
-                <DataGrid.RowStyle>
-                    <Style TargetType="DataGridRow">
-                        <Setter Property="Background" Value="White"/>
-                        <Setter Property="Padding" Value="0,12"/>
-                        <Setter Property="FontSize" Value="12"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="DataGridRow">
-                                    <Border Background="{TemplateBinding Background}"
-                                        Padding="{TemplateBinding Padding}"
-                                        BorderThickness="0,1,0,0"
-                                        BorderBrush="{StaticResource BrushGray200}">
-                                        <DataGridCellsPresenter/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </DataGrid.CellStyle>
-
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="ID" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>

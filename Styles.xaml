@@ -83,10 +83,43 @@
     <SolidColorBrush x:Key="BrushGray800" Color="{StaticResource Gray800}"/>
     <SolidColorBrush x:Key="BrushGray900" Color="{StaticResource Gray900}"/>
 
+    <!-- Window -->
+    <Style TargetType="Window">
+        <Setter Property="FontFamily" Value="LINE SEED JP"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+    
+    <!-- Label -->
+    <Style TargetType="Label">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Height" Value="30"/>
+    </Style>
+    
+    <!-- TextBlock -->
+    <Style TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+    <Style x:Key="Header1" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Margin" Value="0,0,0,20"/>
+    </Style>
+    <Style x:Key="Header2" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+
     <!-- TextBox -->
-    <Style TargetType="TextBox">
+    <!-- Single Line TextBox -->
+    <Style x:Key="SingleLineTextBox" TargetType="TextBox">
         <Setter Property="Padding" Value="4"/>
         <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
@@ -101,10 +134,86 @@
         </Setter>
     </Style>
 
+    <Style x:Key="MultiLineTextBox" TargetType="TextBox">
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="AcceptsReturn" Value="True"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource BrushGray600}"
+                            BorderThickness="1"
+                            CornerRadius="4">
+                        <ScrollViewer x:Name="PART_ContentHost"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ComboBox -->
+    <Style TargetType="ComboBox">
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Height" Value="34"/>
+    </Style>
+    
+    <!-- DataGrid -->
+    <Style TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="GridLinesVisibility" Value="None"/>
+        <Setter Property="RowHeaderWidth" Value="0"/>
+        <Setter Property="Background" Value="{StaticResource BrushGray100}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushGray100}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+    </Style>
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="{StaticResource BrushGray50}"/>
+        <Setter Property="Foreground" Value="{StaticResource BrushGray800}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="8, 12"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style TargetType="DataGridRow">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Padding" Value="0,12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridRow">
+                    <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}"
+                                    BorderThickness="0,1,0,0"
+                                    BorderBrush="{StaticResource BrushGray200}">
+                        <DataGridCellsPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="DataGridCell">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
     <!-- Button -->
-    <Style x:Key="Button_Primary" TargetType="Button">
+    <Style x:Key="BaseButton" TargetType="Button">
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource BrushGreen800}"/>
+        <Setter Property="Height" Value="34"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -115,15 +224,16 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="Button_Secondary" TargetType="Button">
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="FontWeight" Value="Bold" />
+
+    <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="Foreground" Value="{StaticResource BrushGreen800}"/>
+        <Setter Property="Height" Value="34"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border BorderThickness="1" Background="White" CornerRadius="4"
                             Padding="{TemplateBinding Padding}"
-                            BorderBrush="{TemplateBinding BorderBrush}">
+                            BorderBrush="{TemplateBinding Foreground}">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
@@ -131,8 +241,8 @@
         </Setter>
     </Style>
 
-    <Style x:Key="Button_LinkStyle" TargetType="Button">
-        <Setter Property="Cursor" Value="Hand"/>
+    <Style x:Key="LinkLikeButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -146,7 +256,6 @@
                                         </TextDecorationCollection>
                                     </Setter.Value>
                                 </Setter>
-
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
                                         <Setter Property="TextDecorations">

@@ -8,6 +8,7 @@ namespace Mooforest {
 
         public MainWindow() {
             InitializeComponent();
+            Menu.SelectedIndex = 0;
         }
 
         private void Menu_SelectionChanged(object sender, SelectionChangedEventArgs args) {

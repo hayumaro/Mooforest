@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mooforest.Features.IssueManagement"
         mc:Ignorable="d"
-        Title="AddHistoryView" Height="450" Width="800" WindowStartupLocation="CenterScreen"
-        FontFamily="LINE SEED JP"
-        FontSize="14">
+        Title="対応を追加する - " Height="450" Width="800" WindowStartupLocation="CenterScreen"
+        FontFamily="LINE Seed JP" FontSize="14">
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -16,7 +15,7 @@
             <RowDefinition Height="12"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="対応を追加する" FontSize="18" FontWeight="Bold"/>
+        <TextBlock Grid.Row="0" Style="{StaticResource Header1}" Text="対応を追加する"/>
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -30,21 +29,16 @@
                 <ColumnDefinition Width="16"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="状態" FontWeight="Bold" VerticalAlignment="Center"/>
-            <ComboBox Grid.Row="0" Grid.Column="2" x:Name="InputStatus" Height="30"
+            <Label Grid.Row="0" Grid.Column="0" Content="状態"/>
+            <ComboBox Grid.Row="0" Grid.Column="2" x:Name="InputStatus"
                 ItemsSource="{x:Static local:IssueManagementModel.Statuses}" 
                 DisplayMemberPath="Name"
                 SelectedValuePath="Id"/>
-            <Label Grid.Row="2" Grid.Column="0" Content="内容" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="2" Grid.Column="2" x:Name="InputDescription" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
-                TextWrapping="Wrap" VerticalAlignment="Stretch"/>
-            <Label Grid.Row="4" Grid.Column="0" Content="次にやること" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="4" Grid.Column="2" x:Name="InputToDo" Height="30" VerticalContentAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="内容"/>
+            <TextBox Grid.Row="2" Grid.Column="2" x:Name="InputDescription" Style="{StaticResource MultiLineTextBox}"/>
+            <Label Grid.Row="4" Grid.Column="0" Content="次にやること"/>
+            <TextBox Grid.Row="4" Grid.Column="2" x:Name="InputToDo" Style="{StaticResource SingleLineTextBox}"/>
         </Grid>
-        <Button Grid.Row="4" Content="追加する" Style="{StaticResource Button_Primary}" Background="{StaticResource BrushGreen800}"
-                HorizontalAlignment="Right"
-                Height="53"
-                Width="130"
-                Click="AddHistory_CLick"/>
+        <Button Grid.Row="4" Content="追加する" Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" Width="130" Click="AddHistoryClick"/>
     </Grid>
 </Window>

@@ -4,10 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Mooforest.Features.IssueManagement"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-    </UserControl.Resources>
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             FontFamily="LINE Seed JP" FontSize="14">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,26 +19,10 @@
                           IsChecked="False"
                           Checked="DisplayClosed_Checked"
                           Unchecked="DisplayClosed_Unchecked"/>
-                <Button Style="{StaticResource Button_Primary}" HorizontalAlignment="Right"
-                    Content="課題を追加する"
-                    Padding="16,0"
-                    Height="36"
-                    Background="{StaticResource BrushGreen800}"
-                    Click="AddIssue_Click"/>
+                <Button Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" Content="課題を追加する" Padding="16,0" Click="AddIssue_Click"/>
             </StackPanel>
         </Grid>
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Issues}"
-          AutoGenerateColumns="False"
-          HeadersVisibility="Column"
-          GridLinesVisibility="None"
-          RowHeaderWidth="0"
-          Background="{StaticResource BrushGray100}"
-          BorderThickness="1"
-          BorderBrush="{StaticResource BrushGray100}"
-          CanUserAddRows="False"
-          IsReadOnly="True"
-          SelectionChanged="DataGrid_SelectionChanged">
-
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Issues}" SelectionChanged="DataGrid_SelectionChanged">
             <!-- なぜか知らないがマウスオーバーや行選択時の背景色をTriggersでうまく制御できないので、色を上書きする-->
             <DataGrid.Resources>
                 <!-- 非アクティブ選択行（ウィンドウが非フォーカス時） -->
@@ -49,46 +32,6 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="White"/>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{StaticResource Gray800}"/>
             </DataGrid.Resources>
-
-            <!-- ヘッダー -->
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="{StaticResource BrushGray50}"/>
-                    <Setter Property="Foreground" Value="{StaticResource BrushGray800}"/>
-                    <Setter Property="FontWeight" Value="SemiBold"/>
-                    <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="Padding" Value="8, 12"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
-
-            <!-- 行 -->
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
-                    <Setter Property="Background" Value="White"/>
-                    <Setter Property="Padding" Value="0,12"/>
-                    <Setter Property="FontSize" Value="12"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="DataGridRow">
-                                <Border Background="{TemplateBinding Background}"
-                                        Padding="{TemplateBinding Padding}"
-                                        BorderThickness="0,1,0,0"
-                                        BorderBrush="{StaticResource BrushGray200}">
-                                    <DataGridCellsPresenter/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                </Style>
-            </DataGrid.CellStyle>
-
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="ID" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
@@ -102,7 +45,7 @@
                 <DataGridTemplateColumn Header="課題名" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource Button_LinkStyle}" Tag="{Binding Id}" Content="{Binding Title}" Padding="12,0" Click="Title_Click"/>
+                            <Button Style="{StaticResource LinkLikeButton}" Tag="{Binding Id}" Content="{Binding Title}" Padding="12,0" Click="Title_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -145,7 +88,7 @@
                 <DataGridTemplateColumn Header="親ID" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{StaticResource Button_LinkStyle}" Content="{Binding ParentId}" Padding="12,0" Click="ParentId_Click"/>
+                            <Button Style="{StaticResource LinkLikeButton}" Content="{Binding ParentId}" Padding="12,0" Click="ParentId_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

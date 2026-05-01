@@ -6,12 +6,17 @@ namespace Mooforest.Features.IssueManagement {
 
         public AddHistoryView(Issue issue) {
             InitializeComponent();
+
+            // Initialize Data
             OwnIssue = issue;
+
+            // Initialize UIs
+            Title += $"{OwnIssue.Title} ({OwnIssue.Id})";
             var status = IssueManagementModel.Statuses.FirstOrDefault(x => x.Id == OwnIssue.Id);
             InputStatus.SelectedItem = status;
         }
 
-        private void AddHistory_CLick(object sender, RoutedEventArgs e) {
+        private void AddHistoryClick(object sender, RoutedEventArgs e) {
             if (InputStatus.SelectedIndex == -1) {
                 MessageBox.Show("ステータスを指定してください");
                 return;
