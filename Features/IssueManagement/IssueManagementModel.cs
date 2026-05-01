@@ -4,27 +4,52 @@ using System.Globalization;
 
 namespace Mooforest.Features.IssueManagement {
 	public record Status(int Id, string Name, int SortOrder, bool IsClosed);
-    public record Issue(int Id, string Title, string Description, int StatusId, string Status, DateTime CreatedAt, DateTime UpdatedAt, int? ParentId, string? ToDo);
+    public record Category(int Id, string Name);
+    public record Issue(
+        int Id,
+        string Title,
+        string Description,
+        int StatusId,
+        string Status,
+        DateTime CreatedAt,
+        DateTime UpdatedAt,
+        int? ParentId,
+        string? ToDo,
+        int CategoryId,
+        string Category);
 	public record History(int Id, int IssueId, DateTime CreatedAt, int StatusId, string Status, string Description);
 
 	public class IssueManagementModel {
-		// 状態一覧のリスト。マスタのキャッシュ。
+		// Caches of Master
         public static ObservableCollection<Status> Statuses { get; private set; } = [];
+        public static ObservableCollection<Category> Categories { get; private set; } = [];
 
-		// 現在画面に表示しているIssueのリスト。画面を更新するたびに読み込みなおす。
-		public static ObservableCollection<Issue> Issues { get; private set; } = [];
+        // 現在画面に表示しているIssueのリスト。画面を更新するたびに読み込みなおす。
+        public static ObservableCollection<Issue> Issues { get; private set; } = [];
 
         public static void Initialize() {
 			using var con = new SqliteConnection(DataSource);
 			con.Open();
 			CreateTable(con);
 			LoadStatuses(con);
+            LoadCategories(con);
+        }
+
+        private static void LoadCategories(SqliteConnection con) {
+            Categories.Clear();
+            using var cmd = new SqliteCommand(@"Select Id, Name From Categories", con);
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read()) {
+                var id = reader.GetInt32(0);
+                var name = reader.GetString(1);
+                Categories.Add(new Category(id, name));
+            }
         }
 
         public static Issue? GetIssue(int id) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
-            using var cmd = new SqliteCommand(@"Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo From Issues Where Id=@Id", con);
+            using var cmd = new SqliteCommand(@"Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo, CategoryId From Issues Where Id=@Id", con);
             cmd.Parameters.AddWithValue("@Id", id);
             using var reader = cmd.ExecuteReader();
             return reader.Read() ? CreateIssue(reader) : null;
@@ -73,16 +98,17 @@ namespace Mooforest.Features.IssueManagement {
             return histories;
         }
 
-        public static void InsertIssue(string title, string description, string toDo) {
+        public static void InsertIssue(string title, string description, string toDo, int categoryId) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
-            using var cmd = new SqliteCommand(@"Insert Into Issues (Title, Description, StatusId, CreatedAt, UpdatedAt, ToDo)
-				Values(@Title, @Description, 1, @CreatedAt, @UpdatedAt, @ToDo)", con);
+            using var cmd = new SqliteCommand(@"Insert Into Issues (Title, Description, StatusId, CreatedAt, UpdatedAt, ToDo, CategoryId)
+				Values(@Title, @Description, 1, @CreatedAt, @UpdatedAt, @ToDo, @CategoryId)", con);
 			cmd.Parameters.AddWithValue("@Title", title);
             cmd.Parameters.AddWithValue("@Description", description);
             cmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
             cmd.Parameters.AddWithValue("@UpdatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
             cmd.Parameters.AddWithValue("@ToDo", toDo);
+            cmd.Parameters.AddWithValue("@CategoryId", categoryId);
             cmd.ExecuteNonQuery();
             LoadIssuesWhereIsClosedEquals(con, false);
         }
@@ -186,7 +212,7 @@ namespace Mooforest.Features.IssueManagement {
 
         private static void LoadIssues(SqliteConnection con) {
 			Issues.Clear();
-			using var cmd = new SqliteCommand(@"Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo From Issues", con);
+			using var cmd = new SqliteCommand(@"Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo, CategoryId From Issues", con);
 			using var reader = cmd.ExecuteReader();
             while (reader.Read()) {
                 Issues.Add(CreateIssue(reader));
@@ -204,7 +230,9 @@ namespace Mooforest.Features.IssueManagement {
             var updatedAt = DateTime.ParseExact(reader.GetString(5), "yyyy-MM-dd", CultureInfo.InvariantCulture);
             int? parentId = reader.IsDBNull(6) ? null : reader.GetInt32(6);
             string? toDo = reader.IsDBNull(7) ? null : reader.GetString(7);
-            return new Issue(id, title, desc, statusId, status, createdAt, updatedAt, parentId, toDo);
+            int categoryId = reader.GetInt32(8);
+            var category = Categories.FirstOrDefault(x => x.Id == categoryId)!.Name;
+            return new Issue(id, title, desc, statusId, status, createdAt, updatedAt, parentId, toDo, categoryId, category);
         }
     }
 }

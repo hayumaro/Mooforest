@@ -15,15 +15,8 @@ namespace Mooforest.Features.IssueManagement {
             InputTitle.Text = OwnIssue.Title;
             InputDescription.Text = OwnIssue.Description;
             InputToDo.Text = OwnIssue.ToDo;
-
-            // Status（ComboBox）
-            foreach (var status in IssueManagementModel.Statuses) {
-                InputStatus.Items.Add(new ComboBoxItem { Content = status.Name, Tag = status.Id });
-                // 初期値指定
-                if (OwnIssue.StatusId == status.Id) {
-                    InputStatus.SelectedIndex = InputStatus.Items.Count - 1;
-                }
-            }
+            var status = IssueManagementModel.Statuses.FirstOrDefault(x => x.Id == OwnIssue.Id);
+            InputStatus.SelectedItem = status;
         }
 
         private int SelectedStatusId() {

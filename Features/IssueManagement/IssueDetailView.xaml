@@ -29,6 +29,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="12"/>
                 <RowDefinition Height="Auto"/>
@@ -42,21 +44,24 @@
                 <ColumnDefinition Width="16"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="ステータス" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding OwnIssue.Status}" VerticalAlignment="Center"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="カテゴリー" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding OwnIssue.Category}" VerticalAlignment="Center"/>
 
-            <Label Grid.Row="2" Grid.Column="0" Content="説明" FontWeight="Bold" VerticalAlignment="Top"/>
-            <ScrollViewer Grid.Row="2" Grid.Column="2" VerticalScrollBarVisibility="Auto">
+            <Label Grid.Row="2" Grid.Column="0" Content="ステータス" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding OwnIssue.Status}" VerticalAlignment="Center"/>
+
+            <Label Grid.Row="4" Grid.Column="0" Content="説明" FontWeight="Bold" VerticalAlignment="Top"/>
+            <ScrollViewer Grid.Row="4" Grid.Column="2" VerticalScrollBarVisibility="Auto">
                 <TextBlock Text="{Binding OwnIssue.Description}" TextWrapping="Wrap" VerticalAlignment="Top"/>
             </ScrollViewer>
 
-            <Label Grid.Row="4" Grid.Column="0" Content="次にやること" FontWeight="Bold"/>
-            <TextBlock Grid.Row="4" Grid.Column="2" Text="{Binding OwnIssue.ToDo}" TextWrapping="Wrap"/>
+            <Label Grid.Row="6" Grid.Column="0" Content="次にやること" FontWeight="Bold"/>
+            <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding OwnIssue.ToDo}" TextWrapping="Wrap"/>
 
-            <Label Grid.Row="6" Grid.Column="0" Content="作成日" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding OwnIssue.CreatedAt, StringFormat=yyyy-MM-dd}" VerticalAlignment="Center"/>
-            <Label Grid.Row="8" Grid.Column="0" Content="更新日" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="8" Grid.Column="2" Text="{Binding OwnIssue.UpdatedAt, StringFormat=yyyy-MM-dd}" VerticalAlignment="Center"/>
+            <Label Grid.Row="8" Grid.Column="0" Content="作成日" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="8" Grid.Column="2" Text="{Binding OwnIssue.CreatedAt, StringFormat=yyyy-MM-dd}" VerticalAlignment="Center"/>
+            <Label Grid.Row="10" Grid.Column="0" Content="更新日" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="10" Grid.Column="2" Text="{Binding OwnIssue.UpdatedAt, StringFormat=yyyy-MM-dd}" VerticalAlignment="Center"/>
 
         </Grid>
         <Grid Grid.Row="3">

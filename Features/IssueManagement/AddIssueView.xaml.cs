@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using System.Windows.Markup;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace Mooforest.Features.IssueManagement {
     public partial class AddIssueView : Window {
@@ -20,7 +20,11 @@ namespace Mooforest.Features.IssueManagement {
                 MessageBox.Show("次にやることを入力してください");
                 return;
             }
-            IssueManagementModel.InsertIssue(InputTitle.Text, InputDescription.Text, InputToDo.Text);
+            if (InputCategory.SelectedIndex == -1) {
+                MessageBox.Show("カテゴリーを選んでください");
+                return;
+            }
+            IssueManagementModel.InsertIssue(InputTitle.Text, InputDescription.Text, InputToDo.Text, (int)InputCategory.SelectedValue);
             MessageBox.Show("課題を登録しました");
             Close();
         }
