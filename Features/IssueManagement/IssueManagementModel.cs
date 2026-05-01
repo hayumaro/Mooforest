@@ -23,9 +23,7 @@ namespace Mooforest.Features.IssueManagement {
 		// Caches of Master
         public static ObservableCollection<Status> Statuses { get; private set; } = [];
         public static ObservableCollection<Category> Categories { get; private set; } = [];
-
-        // 現在画面に表示しているIssueのリスト。画面を更新するたびに読み込みなおす。
-        public static ObservableCollection<Issue> Issues { get; private set; } = [];
+        private static readonly string IssuesQuery = "Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo, CategoryId From Issues";
 
         public static void Initialize() {
 			using var con = new SqliteConnection(DataSource);
@@ -34,8 +32,6 @@ namespace Mooforest.Features.IssueManagement {
 			LoadStatuses(con);
             LoadCategories(con);
         }
-
-        private static readonly string IssuesQuery = "Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo, CategoryId From Issues";
 
         public static Issue? GetIssue(int id) {
             using var con = new SqliteConnection(DataSource);
@@ -46,30 +42,25 @@ namespace Mooforest.Features.IssueManagement {
             return reader.Read() ? CreateIssue(reader) : null;
         }
 
-        public static void LoadIssues() {
-            using var con = new SqliteConnection(DataSource);
-            con.Open();
-            LoadIssues(con);
+        public static void LoadOpenIssues(ObservableCollection<Issue> issues) {
+            LoadIssuesWhereIsClosedEquals(issues, false);
         }
 
-        public static void LoadOpenIssues() {
-            LoadIssuesWhereIsClosedEquals(false);
-        }
-        public static void LoadClosedIssues() {
-            LoadIssuesWhereIsClosedEquals(true);
+        public static void LoadClosedIssues(ObservableCollection<Issue> issues) {
+            LoadIssuesWhereIsClosedEquals(issues, true);
         }
 
-        public static void LoadIssuesWhereIsClosedEquals(bool isClosed) {
+        private static void LoadIssuesWhereIsClosedEquals(ObservableCollection<Issue> issues, bool isClosed) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
-            Issues.Clear();
+            issues.Clear();
             using var cmd = new SqliteCommand(@"Select Issues.* From Issues
                 Inner Join Statuses On Issues.StatusId = Statuses.Id
                 Where Statuses.IsClosed = @IsClosed;", con);
             cmd.Parameters.AddWithValue("@IsClosed", isClosed ? 1 : 0);
             using var reader = cmd.ExecuteReader();
             while (reader.Read()) {
-                Issues.Add(CreateIssue(reader));
+                issues.Add(CreateIssue(reader));
             }
         }
 
@@ -209,16 +200,6 @@ namespace Mooforest.Features.IssueManagement {
                 var id = reader.GetInt32(0);
                 var name = reader.GetString(1);
                 Categories.Add(new Category(id, name));
-            }
-        }
-
-
-        private static void LoadIssues(SqliteConnection con) {
-			Issues.Clear();
-			using var cmd = new SqliteCommand(IssuesQuery, con);
-			using var reader = cmd.ExecuteReader();
-            while (reader.Read()) {
-                Issues.Add(CreateIssue(reader));
             }
         }
 

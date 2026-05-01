@@ -1,13 +1,25 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Mooforest.Features.IssueManagement {
     public partial class IssueManagementView : UserControl {
+        // いま画面に表示しているIssueのリスト。
+        public static ObservableCollection<Issue> Issues { get; private set; } = [];
+
         public IssueManagementView() {
             InitializeComponent();
             IssueManagementModel.Initialize();
-            IssueManagementModel.LoadIssuesWhereIsClosedEquals(false);
-            DataContext = new IssueManagementModel();
+            IssueManagementModel.LoadOpenIssues(Issues);
+            DataContext = this;
+        }
+
+        public void Reload() {
+            if (DisplayClosed.IsChecked == true) {
+                IssueManagementModel.LoadClosedIssues(Issues);
+            } else {
+                IssueManagementModel.LoadOpenIssues(Issues);
+            }
         }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -16,16 +28,16 @@ namespace Mooforest.Features.IssueManagement {
         }
 
         private void DisplayClosed_Checked(object sender, EventArgs e) {
-            IssueManagementModel.LoadClosedIssues();
+            IssueManagementModel.LoadClosedIssues(Issues);
         }
 
         private void DisplayClosed_Unchecked(object sender, EventArgs e) {
-            IssueManagementModel.LoadOpenIssues();
+            IssueManagementModel.LoadOpenIssues(Issues);
         }
 
         private void Title_Click(object sender, RoutedEventArgs e) {
             if (sender is not Button button) return;
-            var issue = IssueManagementModel.Issues.FirstOrDefault(x => x.Id == (int)button.Tag)!;
+            var issue = Issues.FirstOrDefault(x => x.Id == (int)button.Tag)!;
             var histories = IssueManagementModel.LoadHistories(issue.Id);
             var detailWindow = new IssueDetailView(issue, histories) {
                 Owner = Application.Current.MainWindow as MainWindow

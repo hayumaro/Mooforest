@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
-                <CheckBox Content="クローズした課題を表示する" VerticalAlignment="Center" Margin="16,0"
+                <CheckBox Content="クローズした課題を表示する" x:Name="DisplayClosed" VerticalAlignment="Center" Margin="16,0"
                           IsChecked="False"
                           Checked="DisplayClosed_Checked"
                           Unchecked="DisplayClosed_Unchecked"/>

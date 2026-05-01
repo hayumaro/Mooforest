@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mooforest.Features.IssueManagement"
         mc:Ignorable="d"
-        Title="{Binding OwnIssue.Title}" Height="720" Width="960" WindowStartupLocation="CenterScreen"
+        Title="" Height="720" Width="960" WindowStartupLocation="CenterScreen"
         FontFamily="LINE Seed JP" FontSize="14">
     <Grid Margin="16">
         <Grid.RowDefinitions>
@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <TextBlock Style="{StaticResource Header1}" Text="{Binding OwnIssue.Title}"/>
+            <TextBlock Style="{StaticResource Header1}" x:Name="TextTitle"/>
             <Button Style="{StaticResource SecondaryButton}" HorizontalAlignment="Right" Content="編集" Padding="16,0" Click="Edit_Click"/>
         </Grid>
         <Grid Grid.Row="1">
@@ -38,19 +38,19 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="カテゴリー"/>
-            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding OwnIssue.Category}"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" x:Name="TextCategory"/>
             <Label Grid.Row="2" Grid.Column="0" Content="ステータス"/>
-            <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding OwnIssue.Status}"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" x:Name="TextStatus"/>
             <Label Grid.Row="4" Grid.Column="0" Content="説明" VerticalAlignment="Top"/>
             <ScrollViewer Grid.Row="4" Grid.Column="2" VerticalScrollBarVisibility="Auto">
-                <TextBlock Text="{Binding OwnIssue.Description}" VerticalAlignment="Top"/>
+                <TextBlock x:Name="TextDescription" VerticalAlignment="Top"/>
             </ScrollViewer>
             <Label Grid.Row="6" Grid.Column="0" Content="次にやること"/>
-            <TextBlock Grid.Row="6" Grid.Column="2" Text="{Binding OwnIssue.ToDo}"/>
+            <TextBlock Grid.Row="6" Grid.Column="2" x:Name="TextToDo"/>
             <Label Grid.Row="8" Grid.Column="0" Content="作成日"/>
-            <TextBlock Grid.Row="8" Grid.Column="2" Text="{Binding OwnIssue.CreatedAt, StringFormat=yyyy-MM-dd}"/>
+            <TextBlock Grid.Row="8" Grid.Column="2" x:Name="TextCreatedAt"/>
             <Label Grid.Row="10" Grid.Column="0" Content="更新日"/>
-            <TextBlock Grid.Row="10" Grid.Column="2" Text="{Binding OwnIssue.UpdatedAt, StringFormat=yyyy-MM-dd}"/>
+            <TextBlock Grid.Row="10" Grid.Column="2" x:Name="TextUpdatedAt"/>
         </Grid>
 
         <Grid Grid.Row="3">
@@ -63,7 +63,7 @@
                 <TextBlock Style="{StaticResource Header2}" Text="対応履歴"/>
                 <Button Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" Content="対応を追加する" Padding="16,0" Click="AddHistory_Click"/>
             </Grid>
-            <DataGrid Grid.Row="2" ItemsSource="{Binding Histories}">
+            <DataGrid Grid.Row="2" x:Name="DataGridHistories" ItemsSource="{Binding Histories}">
                 <!-- なぜか知らないがマウスオーバーや行選択時の背景色をTriggersでうまく制御できないので、色を上書きする-->
                 <DataGrid.Resources>
                     <!-- 非アクティブ選択行（ウィンドウが非フォーカス時） -->
