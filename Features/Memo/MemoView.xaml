@@ -5,8 +5,57 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Mooforest.Features.Memo"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             FontSize="14"
+             FontFamily="Line Seed JP">
     <Grid>
-        <TextBox/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="16"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="メモ一覧" FontWeight="Bold"/>
+            <ListBox Grid.Row="2" x:Name="MemoList" ItemsSource="{Binding Memos}"
+                     SelectionMode="Single"
+                     SelectionChanged="MenuList_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Title}" Foreground="{StaticResource BrushGray800}" Padding="8">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="TextDecorations" Value="Underline" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="タイトル" FontWeight="Bold"/>
+            <TextBox Grid.Row="2" x:Name="MemoTitle" PreviewKeyDown="TextBox_PreviewKeyDown"/>
+            <Label Grid.Row="4" Content="内容" FontWeight="Bold"/>
+            <TextBox Grid.Row="6" x:Name="MemoContent" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"
+                     PreviewKeyDown="TextBox_PreviewKeyDown"/>
+        </Grid>
     </Grid>
 </UserControl>

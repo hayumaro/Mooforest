@@ -1,23 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Mooforest.Features.Memo {
-    /// <summary>
-    /// MemoView.xaml の相互作用ロジック
-    /// </summary>
     public partial class MemoView : UserControl {
+        public MemoModel Model;
+
         public MemoView() {
             InitializeComponent();
+            MemoModel.Initialize();
+            Model = new MemoModel();
+            DataContext = Model;
+        }
+
+        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.S && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control) {
+                MemoModel.Save(MemoTitle.Text, MemoContent.Text);
+                e.Handled = true;
+            }
+        }
+
+        private void MenuList_SelectionChanged(object sender, EventArgs e) {
+            if (MemoList.SelectedItem is not Memo memo) return;
+            MemoModel.CurrentId = memo.Id;
+            MemoTitle.Text = memo.Title;
+            MemoContent.Text = MemoModel.LoadContent(memo.Id);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Mooforest.Features.IssueManagement
         }
 
         private void Reload() {
-            OwnIssue = IssueManagementModel.Issues.FirstOrDefault(x => x.Id == OwnIssue.Id)!;
+            OwnIssue = IssueManagementModel.GetIssue(OwnIssue.Id)!;
             Histories = IssueManagementModel.LoadHistories(OwnIssue.Id);
         }
 

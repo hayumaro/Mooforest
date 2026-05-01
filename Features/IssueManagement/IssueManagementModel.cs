@@ -21,6 +21,15 @@ namespace Mooforest.Features.IssueManagement {
 			LoadStatuses(con);
         }
 
+        public static Issue? GetIssue(int id) {
+            using var con = new SqliteConnection(DataSource);
+            con.Open();
+            using var cmd = new SqliteCommand(@"Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo From Issues Where Id=@Id", con);
+            cmd.Parameters.AddWithValue("@Id", id);
+            using var reader = cmd.ExecuteReader();
+            return reader.Read() ? CreateIssue(reader) : null;
+        }
+
 		// Select * from Issues
         public static void LoadIssues() {
             using var con = new SqliteConnection(DataSource);
@@ -41,7 +50,9 @@ namespace Mooforest.Features.IssueManagement {
                 Where Statuses.IsClosed = @IsClosed;", con);
             cmd.Parameters.AddWithValue("@IsClosed", isClosed ? 1 : 0);
             using var reader = cmd.ExecuteReader();
-            AddIssues(reader);
+            while (reader.Read()) {
+                Issues.Add(CreateIssue(reader));
+            }
         }
 
         public static ObservableCollection<History> LoadHistories(int issueId) {
@@ -177,22 +188,23 @@ namespace Mooforest.Features.IssueManagement {
 			Issues.Clear();
 			using var cmd = new SqliteCommand(@"Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo From Issues", con);
 			using var reader = cmd.ExecuteReader();
-            AddIssues(reader);
+            while (reader.Read()) {
+                Issues.Add(CreateIssue(reader));
+            }
         }
 
-        private static void AddIssues(SqliteDataReader reader) {
-            while (reader.Read()) {
-                var id = reader.GetInt32(0);
-                var title = reader.GetString(1);
-                var desc = reader.GetString(2);
-                var statusId = reader.GetInt32(3);
-                var status = Statuses.FirstOrDefault(x => x.Id == statusId)!.Name;
-                var createdAt = DateTime.ParseExact(reader.GetString(4), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                var updatedAt = DateTime.ParseExact(reader.GetString(5), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                int? parentId = reader.IsDBNull(6) ? null : reader.GetInt32(6);
-                string? toDo = reader.IsDBNull(7) ? null : reader.GetString(7);
-                Issues.Add(new Issue(id, title, desc, statusId, status, createdAt, updatedAt, parentId, toDo));
-            }
+        // readerの先頭行からIssueインスタンスを作る
+        private static Issue CreateIssue(SqliteDataReader reader) {
+            var id = reader.GetInt32(0);
+            var title = reader.GetString(1);
+            var desc = reader.GetString(2);
+            var statusId = reader.GetInt32(3);
+            var status = Statuses.FirstOrDefault(x => x.Id == statusId)!.Name;
+            var createdAt = DateTime.ParseExact(reader.GetString(4), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var updatedAt = DateTime.ParseExact(reader.GetString(5), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            int? parentId = reader.IsDBNull(6) ? null : reader.GetInt32(6);
+            string? toDo = reader.IsDBNull(7) ? null : reader.GetString(7);
+            return new Issue(id, title, desc, statusId, status, createdAt, updatedAt, parentId, toDo);
         }
     }
 }
