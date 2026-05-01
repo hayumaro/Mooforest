@@ -170,28 +170,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <!-- ComboBox -->
-    <Style TargetType="ComboBox">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ComboBox">
-                    <Border CornerRadius="4"
-                            BorderBrush="{StaticResource BorderColor}"
-                            BorderThickness="1"
-                            Background="White">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="30"/>
-                            </Grid.ColumnDefinitions>
-                            <ContentPresenter Margin="5,0,0,0" VerticalAlignment="Center"/>
-                            <ToggleButton Grid.Column="1" Content="▼" BorderThickness="0" Background="Transparent"/>
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
 </ResourceDictionary>

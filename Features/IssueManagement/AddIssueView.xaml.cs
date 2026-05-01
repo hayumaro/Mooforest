@@ -16,6 +16,10 @@ namespace Mooforest.Features.IssueManagement {
                 MessageBox.Show("内容を入力してください");
                 return;
             }
+            if (string.IsNullOrWhiteSpace(InputToDo.Text)) {
+                MessageBox.Show("次にやることを入力してください");
+                return;
+            }
             IssueManagementModel.InsertIssue(InputTitle.Text, InputDescription.Text, InputToDo.Text);
             MessageBox.Show("課題を登録しました");
             Close();

@@ -1,13 +1,13 @@
-﻿<Window x:Class="Mooforest.Features.IssueManagement.AddIssueView"
+﻿<Window x:Class="Mooforest.Features.IssueManagement.AddHistoryView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mooforest.Features.IssueManagement"
         mc:Ignorable="d"
-        Title="AddIssueView" Height="450" Width="800"
+        Title="AddHistoryView" Height="450" Width="800" WindowStartupLocation="CenterScreen"
         FontFamily="LINE SEED JP"
-        FontSize="14" WindowStartupLocation="CenterScreen">
+        FontSize="14">
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -16,7 +16,7 @@
             <RowDefinition Height="12"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="課題を追加する" FontSize="18" FontWeight="Bold"/>
+        <TextBlock Grid.Row="0" Text="対応を追加する" FontSize="18" FontWeight="Bold"/>
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -30,8 +30,8 @@
                 <ColumnDefinition Width="16"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="タイトル" FontWeight="Bold" VerticalAlignment="Center"/>
-            <TextBox Grid.Row="0" Grid.Column="2" x:Name="InputTitle" Height="30" VerticalContentAlignment="Center"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="状態" FontWeight="Bold" VerticalAlignment="Center"/>
+            <ComboBox Grid.Row="0" Grid.Column="2" x:Name="InputStatus" ItemsSource="{Binding Statuses}" Height="30"/>
             <Label Grid.Row="2" Grid.Column="0" Content="内容" FontWeight="Bold" VerticalAlignment="Center"/>
             <TextBox Grid.Row="2" Grid.Column="2" x:Name="InputDescription" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                 TextWrapping="Wrap" VerticalAlignment="Stretch"/>
@@ -42,6 +42,6 @@
                 HorizontalAlignment="Right"
                 Height="53"
                 Width="130"
-                Click="AddIssueButton_Click"/>
+                Click="AddHistory_CLick"/>
     </Grid>
 </Window>

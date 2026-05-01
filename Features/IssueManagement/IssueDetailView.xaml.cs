@@ -14,8 +14,25 @@ namespace Mooforest.Features.IssueManagement
             DataContext = this;
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e) {
-            Close();
+        private void Reload() {
+            OwnIssue = IssueManagementModel.Issues.FirstOrDefault(x => x.Id == OwnIssue.Id)!;
+            Histories = IssueManagementModel.LoadHistories(OwnIssue.Id);
+        }
+
+        private void Edit_Click(object sender, RoutedEventArgs e) {
+            var view = new EditIssueView(OwnIssue) {
+                Owner = this
+            };
+            view.ShowDialog();
+            Reload();
+        }
+
+        private void AddHistory_Click(object sender, RoutedEventArgs e) {
+            var view = new AddHistoryView(OwnIssue) {
+                Owner = this
+            };
+            view.ShowDialog();
+            Reload();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Mooforest.Features.IssueManagement {
 	public record Status(int Id, string Name, int SortOrder, bool IsClosed);
@@ -10,12 +9,12 @@ namespace Mooforest.Features.IssueManagement {
 
 	public class IssueManagementModel {
 		// 状態一覧のリスト。マスタのキャッシュ。
-        public ObservableCollection<Status> Statuses { get; private set; } = [];
+        public static ObservableCollection<Status> Statuses { get; private set; } = [];
 
 		// 現在画面に表示しているIssueのリスト。画面を更新するたびに読み込みなおす。
-		public ObservableCollection<Issue> Issues { get; private set; } = [];
+		public static ObservableCollection<Issue> Issues { get; private set; } = [];
 
-        public IssueManagementModel() {
+        public static void Initialize() {
 			using var con = new SqliteConnection(DataSource);
 			con.Open();
 			CreateTable(con);
@@ -23,13 +22,13 @@ namespace Mooforest.Features.IssueManagement {
         }
 
 		// Select * from Issues
-        public void LoadIssues() {
+        public static void LoadIssues() {
             using var con = new SqliteConnection(DataSource);
             con.Open();
             LoadIssues(con);
         }
 
-        public ObservableCollection<History> LoadHistories(int issueId) {
+        public static ObservableCollection<History> LoadHistories(int issueId) {
             var histories = new ObservableCollection<History>();
             using var con = new SqliteConnection(DataSource);
             con.Open();
@@ -47,7 +46,7 @@ namespace Mooforest.Features.IssueManagement {
             return histories;
         }
 
-		public static void InsertIssue(string title, string description, string toDo) {
+        public static void InsertIssue(string title, string description, string toDo) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
             using var cmd = new SqliteCommand(@"Insert Into Issues (Title, Description, StatusId, CreatedAt, UpdatedAt, ToDo)
@@ -58,6 +57,46 @@ namespace Mooforest.Features.IssueManagement {
             cmd.Parameters.AddWithValue("@UpdatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
             cmd.Parameters.AddWithValue("@ToDo", toDo);
             cmd.ExecuteNonQuery();
+            LoadIssues(con);
+        }
+
+        public static void InsertHistory(int issueId, int statusId, string description) {
+            using var con = new SqliteConnection(DataSource);
+            con.Open();
+            using var cmd = new SqliteCommand(@"Insert Into Histories (IssueId, CreatedAt, Description, StatusId)
+				Values(@IssueId, @CreatedAt, @Description, @StatusId)", con);
+			cmd.Parameters.AddWithValue("@IssueId", issueId);
+            cmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue("@Description", description);
+            cmd.Parameters.AddWithValue("@StatusId", statusId);
+            cmd.ExecuteNonQuery();
+        }
+
+		public static void UpdateToDo(int issueId, string toDo) {
+            using var con = new SqliteConnection(DataSource);
+            con.Open();
+            using var cmd = new SqliteCommand(@"Update Issues Set ToDo=@ToDo, UpdatedAt=@UpdatedAt Where Id=@Id", con);
+            cmd.Parameters.AddWithValue("@Id", issueId);
+            cmd.Parameters.AddWithValue("@ToDo", toDo);
+            cmd.Parameters.AddWithValue("@UpdatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
+            cmd.ExecuteNonQuery();
+            LoadIssues(con);
+        }
+
+		public static void UpdateIssue(int issueId, string title, string description, int statusId, string toDo) {
+            using var con = new SqliteConnection(DataSource);
+            con.Open();
+			using var cmd = new SqliteCommand(@"Update Issues
+				Set Title=@Title, Description=@Description, StatusId=@StatusId, UpdatedAt=@UpdatedAt, ToDo=@ToDo
+				Where Id=@Id", con);
+            cmd.Parameters.AddWithValue("@Title", title);
+            cmd.Parameters.AddWithValue("@Description", description);
+            cmd.Parameters.AddWithValue("@StatusId", statusId);
+            cmd.Parameters.AddWithValue("@UpdatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
+            cmd.Parameters.AddWithValue("@ToDo", toDo);
+            cmd.Parameters.AddWithValue("@Id", issueId);
+            cmd.ExecuteNonQuery();
+            LoadIssues(con);
         }
 
         private static string FilePath { get; } = System.IO.Path.Combine(
@@ -66,7 +105,7 @@ namespace Mooforest.Features.IssueManagement {
             "IssueManagement.db");
         private static readonly string DataSource = $"Data Source = {FilePath}";
 
-        private void CreateTable(SqliteConnection con) {
+        private static void CreateTable(SqliteConnection con) {
 			// Statuses
 			{
 				using var cmd = new SqliteCommand(@"Create Table If Not Exists
@@ -116,7 +155,7 @@ namespace Mooforest.Features.IssueManagement {
 			}
 		}
 
-        private void LoadStatuses(SqliteConnection con) {
+        private static void LoadStatuses(SqliteConnection con) {
 			Statuses.Clear();
 			using var cmd = new SqliteCommand(@"Select Id, Name, SortOrder, IsClosed From Statuses", con);
 			using var reader = cmd.ExecuteReader();
@@ -129,7 +168,7 @@ namespace Mooforest.Features.IssueManagement {
 			}
 		}
 
-        private void LoadIssues(SqliteConnection con) {
+        private static void LoadIssues(SqliteConnection con) {
 			Issues.Clear();
 			using var cmd = new SqliteCommand(@"Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo From Issues", con);
 			using var reader = cmd.ExecuteReader();

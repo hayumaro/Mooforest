@@ -23,7 +23,7 @@
                     Height="36"
                     BorderBrush="{StaticResource BrushGreen800}"
                     Foreground="{StaticResource BrushGreen800}"
-                    Click="Close_Click"/>
+                    Click="Edit_Click"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -67,11 +67,11 @@
             <Grid Grid.Row="0">
                 <TextBlock Text="対応履歴" FontSize="16" Padding="0,16" FontWeight="Bold"/>
                 <Button Style="{StaticResource Button_Primary}" HorizontalAlignment="Right"
-                    Content="対応履歴を追加する"
+                    Content="対応を追加する"
                     Padding="16,0"
                     Height="36"
                     Background="{StaticResource BrushGreen800}"
-                    Click="Close_Click"/>
+                    Click="AddHistory_Click"/>
             </Grid>
             <DataGrid Grid.Row="1" ItemsSource="{Binding Histories}"
                 AutoGenerateColumns="False"

@@ -8,16 +8,10 @@ namespace Mooforest.Features.IssueManagement {
 
         public IssueManagementView() {
             InitializeComponent();
+            IssueManagementModel.Initialize();
+            IssueManagementModel.LoadIssues();
             Model = new IssueManagementModel();
-            Model.LoadIssues();
             DataContext = Model;
-        }
-
-        private void IssueManagementView_PreviewKeyDown(object sender, KeyEventArgs e) {
-            if (e.Key == Key.F5) {
-                Model.LoadIssues();
-            }
-            e.Handled = true;
         }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -27,8 +21,8 @@ namespace Mooforest.Features.IssueManagement {
 
         private void Title_Click(object sender, RoutedEventArgs e) {
             if (sender is not Button button) return;
-            var issue = Model.Issues.FirstOrDefault(x => x.Id == (int)button.Tag)!;
-            var histories = Model.LoadHistories(issue.Id);
+            var issue = IssueManagementModel.Issues.FirstOrDefault(x => x.Id == (int)button.Tag)!;
+            var histories = IssueManagementModel.LoadHistories(issue.Id);
             var detailWindow = new IssueDetailView(issue, histories) {
                 Owner = Application.Current.MainWindow as MainWindow
             };
