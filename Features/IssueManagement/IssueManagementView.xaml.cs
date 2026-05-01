@@ -16,11 +16,11 @@ namespace Mooforest.Features.IssueManagement {
         }
 
         private void DisplayClosed_Checked(object sender, EventArgs e) {
-            IssueManagementModel.LoadIssuesWhereIsClosedEquals(true);
+            IssueManagementModel.LoadClosedIssues();
         }
 
         private void DisplayClosed_Unchecked(object sender, EventArgs e) {
-            IssueManagementModel.LoadIssuesWhereIsClosedEquals(false);
+            IssueManagementModel.LoadOpenIssues();
         }
 
         private void Title_Click(object sender, RoutedEventArgs e) {

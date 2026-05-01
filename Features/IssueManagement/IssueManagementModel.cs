@@ -35,40 +35,33 @@ namespace Mooforest.Features.IssueManagement {
             LoadCategories(con);
         }
 
-        private static void LoadCategories(SqliteConnection con) {
-            Categories.Clear();
-            using var cmd = new SqliteCommand(@"Select Id, Name From Categories", con);
-            using var reader = cmd.ExecuteReader();
-            while (reader.Read()) {
-                var id = reader.GetInt32(0);
-                var name = reader.GetString(1);
-                Categories.Add(new Category(id, name));
-            }
-        }
+        private static readonly string IssuesQuery = "Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo, CategoryId From Issues";
 
         public static Issue? GetIssue(int id) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
-            using var cmd = new SqliteCommand(@"Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo, CategoryId From Issues Where Id=@Id", con);
+            using var cmd = new SqliteCommand($"{IssuesQuery} Where Id=@Id", con);
             cmd.Parameters.AddWithValue("@Id", id);
             using var reader = cmd.ExecuteReader();
             return reader.Read() ? CreateIssue(reader) : null;
         }
 
-		// Select * from Issues
         public static void LoadIssues() {
             using var con = new SqliteConnection(DataSource);
             con.Open();
             LoadIssues(con);
         }
 
+        public static void LoadOpenIssues() {
+            LoadIssuesWhereIsClosedEquals(false);
+        }
+        public static void LoadClosedIssues() {
+            LoadIssuesWhereIsClosedEquals(true);
+        }
+
         public static void LoadIssuesWhereIsClosedEquals(bool isClosed) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
-            LoadIssuesWhereIsClosedEquals(con, isClosed);
-        }
-
-        private static void LoadIssuesWhereIsClosedEquals(SqliteConnection con, bool isClosed) {
             Issues.Clear();
             using var cmd = new SqliteCommand(@"Select Issues.* From Issues
                 Inner Join Statuses On Issues.StatusId = Statuses.Id
@@ -110,7 +103,6 @@ namespace Mooforest.Features.IssueManagement {
             cmd.Parameters.AddWithValue("@ToDo", toDo);
             cmd.Parameters.AddWithValue("@CategoryId", categoryId);
             cmd.ExecuteNonQuery();
-            LoadIssuesWhereIsClosedEquals(con, false);
         }
 
         public static void UpdateIssue(int issueId, string title, string description, int statusId, string toDo) {
@@ -126,7 +118,6 @@ namespace Mooforest.Features.IssueManagement {
             cmd.Parameters.AddWithValue("@ToDo", toDo);
             cmd.Parameters.AddWithValue("@Id", issueId);
             cmd.ExecuteNonQuery();
-            LoadIssuesWhereIsClosedEquals(con, false);
         }
 
         public static void InsertHistory(int issueId, int statusId, string description) {
@@ -197,6 +188,7 @@ namespace Mooforest.Features.IssueManagement {
 			}
 		}
 
+        // Load Master DB
         private static void LoadStatuses(SqliteConnection con) {
 			Statuses.Clear();
 			using var cmd = new SqliteCommand(@"Select Id, Name, SortOrder, IsClosed From Statuses", con);
@@ -209,10 +201,21 @@ namespace Mooforest.Features.IssueManagement {
                 Statuses.Add(new Status(id, name, sortOrder, isClosed));
 			}
 		}
+        private static void LoadCategories(SqliteConnection con) {
+            Categories.Clear();
+            using var cmd = new SqliteCommand(@"Select Id, Name From Categories", con);
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read()) {
+                var id = reader.GetInt32(0);
+                var name = reader.GetString(1);
+                Categories.Add(new Category(id, name));
+            }
+        }
+
 
         private static void LoadIssues(SqliteConnection con) {
 			Issues.Clear();
-			using var cmd = new SqliteCommand(@"Select Id, Title, Description, StatusId, CreatedAt, UpdatedAt, ParentId, Todo, CategoryId From Issues", con);
+			using var cmd = new SqliteCommand(IssuesQuery, con);
 			using var reader = cmd.ExecuteReader();
             while (reader.Read()) {
                 Issues.Add(CreateIssue(reader));
