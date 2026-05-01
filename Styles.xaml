@@ -90,8 +90,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <Border x:Name="TextBox_Border"
-                            Background="{TemplateBinding Background}"
+                    <Border Background="{TemplateBinding Background}"
                             BorderBrush="{StaticResource BrushGray600}"
                             BorderThickness="1"
                             CornerRadius="4">
