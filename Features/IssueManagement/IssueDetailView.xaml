@@ -39,7 +39,7 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="カテゴリー"/>
             <TextBlock Grid.Row="0" Grid.Column="2" x:Name="TextCategory"/>
-            <Label Grid.Row="2" Grid.Column="0" Content="ステータス"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="状態"/>
             <TextBlock Grid.Row="2" Grid.Column="2" x:Name="TextStatus"/>
             <Label Grid.Row="4" Grid.Column="0" Content="説明" VerticalAlignment="Top"/>
             <ScrollViewer Grid.Row="4" Grid.Column="2" VerticalScrollBarVisibility="Auto">
@@ -64,15 +64,6 @@
                 <Button Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" Content="対応を追加する" Padding="16,0" Click="AddHistory_Click"/>
             </Grid>
             <DataGrid Grid.Row="2" x:Name="DataGridHistories" ItemsSource="{Binding Histories}">
-                <!-- なぜか知らないがマウスオーバーや行選択時の背景色をTriggersでうまく制御できないので、色を上書きする-->
-                <DataGrid.Resources>
-                    <!-- 非アクティブ選択行（ウィンドウが非フォーカス時） -->
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="White"/>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{StaticResource Gray800}"/>
-                    <!-- アクティブ選択行（フォーカス中） -->
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="White"/>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{StaticResource Gray800}"/>
-                </DataGrid.Resources>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="ID" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>

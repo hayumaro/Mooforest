@@ -10,16 +10,22 @@ namespace Mooforest.Features.IssueManagement {
         public IssueManagementView() {
             InitializeComponent();
             IssueManagementModel.Initialize();
-            IssueManagementModel.LoadOpenIssues(Issues);
+            IssueManagementModel.GetOpenIssues(Issues);
             DataContext = this;
+            InputCategory.SelectedIndex = -1;
+            InputStatus.SelectedIndex = 0;
         }
 
         public void Reload() {
-            if (DisplayClosed.IsChecked == true) {
-                IssueManagementModel.LoadClosedIssues(Issues);
-            } else {
-                IssueManagementModel.LoadOpenIssues(Issues);
-            }
+            IssueManagementModel.GetIssues(Issues, (int?)InputCategory.SelectedValue, (int?)InputStatus.SelectedValue);
+        }
+
+        private void ClearCategory_Click(object sender, RoutedEventArgs e) {
+            InputCategory.SelectedIndex = -1;
+        }
+
+        private void ClearStatus_Click(object sender, RoutedEventArgs e) {
+            InputStatus.SelectedIndex = -1;
         }
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -27,12 +33,8 @@ namespace Mooforest.Features.IssueManagement {
             dg.SelectedItem = null;
         }
 
-        private void DisplayClosed_Checked(object sender, EventArgs e) {
-            IssueManagementModel.LoadClosedIssues(Issues);
-        }
-
-        private void DisplayClosed_Unchecked(object sender, EventArgs e) {
-            IssueManagementModel.LoadOpenIssues(Issues);
+        private void FilterChanged(object sender, EventArgs e) {
+            IssueManagementModel.GetIssues(Issues, (int?)InputCategory.SelectedValue, (int?)InputStatus.SelectedValue);
         }
 
         private void Title_Click(object sender, RoutedEventArgs e) {

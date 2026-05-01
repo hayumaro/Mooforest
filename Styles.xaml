@@ -83,6 +83,13 @@
     <SolidColorBrush x:Key="BrushGray800" Color="{StaticResource Gray800}"/>
     <SolidColorBrush x:Key="BrushGray900" Color="{StaticResource Gray900}"/>
 
+    <!-- 非アクティブ選択時（ウィンドウが非フォーカス時） -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#00000000"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{StaticResource Gray800}"/>
+    <!-- アクティブ選択時（フォーカス中） -->
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#00000000"/>
+    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{StaticResource Gray800}"/>
+
     <!-- Window -->
     <Style TargetType="Window">
         <Setter Property="FontFamily" Value="LINE SEED JP"/>
@@ -274,6 +281,29 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ClearButton" TargetType="Button">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Content" Value="×"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <TextBlock Text="{TemplateBinding Content}" FontSize="{TemplateBinding FontSize}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#00000000"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

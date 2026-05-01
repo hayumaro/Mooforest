@@ -15,23 +15,30 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
-                <CheckBox Content="クローズした課題を表示する" x:Name="DisplayClosed" VerticalAlignment="Center" Margin="16,0"
-                          IsChecked="False"
-                          Checked="DisplayClosed_Checked"
-                          Unchecked="DisplayClosed_Unchecked"/>
-                <Button Style="{StaticResource PrimaryButton}" HorizontalAlignment="Right" Content="課題を追加する" Padding="16,0" Click="AddIssue_Click"/>
+                <StackPanel>
+                    <Label Content="カテゴリー" Margin="16,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox x:Name="InputCategory" Margin="16,0,0,0"  Width="120" SelectionChanged="FilterChanged"
+                            ItemsSource="{x:Static local:IssueManagementModel.Categories}"
+                            DisplayMemberPath="Name"
+                            SelectedValuePath="Id"/>
+                        <Button Content="×" Style="{StaticResource ClearButton}" Margin="0,0,8,0" Click="ClearCategory_Click"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="状態" Margin="16,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox x:Name="InputStatus" Margin="16,0,0,0" Width="120" SelectionChanged="FilterChanged"
+                            ItemsSource="{x:Static local:IssueManagementModel.Statuses}" 
+                            DisplayMemberPath="Name"
+                            SelectedValuePath="Id"/>
+                        <Button Content="×" Style="{StaticResource ClearButton}" Margin="0,0,8,0" Click="ClearStatus_Click"/>
+                    </StackPanel>
+                </StackPanel>
+                <Button Style="{StaticResource PrimaryButton}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="課題を追加する" Padding="16,0" Click="AddIssue_Click"/>
             </StackPanel>
         </Grid>
         <DataGrid Grid.Row="2" ItemsSource="{Binding Issues}" SelectionChanged="DataGrid_SelectionChanged">
-            <!-- なぜか知らないがマウスオーバーや行選択時の背景色をTriggersでうまく制御できないので、色を上書きする-->
-            <DataGrid.Resources>
-                <!-- 非アクティブ選択行（ウィンドウが非フォーカス時） -->
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="White"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{StaticResource Gray800}"/>
-                <!-- アクティブ選択行（フォーカス中） -->
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="White"/>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="{StaticResource Gray800}"/>
-            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="ID" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>

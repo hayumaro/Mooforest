@@ -18,7 +18,7 @@ namespace Mooforest.Features.IssueManagement {
 
         private void AddHistoryClick(object sender, RoutedEventArgs e) {
             if (InputStatus.SelectedIndex == -1) {
-                MessageBox.Show("ステータスを指定してください");
+                MessageBox.Show("状態を指定してください");
                 return;
             }
             var status = (Status)InputStatus.SelectedItem;

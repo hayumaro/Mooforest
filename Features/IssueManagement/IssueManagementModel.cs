@@ -42,15 +42,47 @@ namespace Mooforest.Features.IssueManagement {
             return reader.Read() ? CreateIssue(reader) : null;
         }
 
-        public static void LoadOpenIssues(ObservableCollection<Issue> issues) {
-            LoadIssuesWhereIsClosedEquals(issues, false);
+        public static void GetIssues(ObservableCollection<Issue> issues, int? categoryId, int? statusId) {
+            var sql = @"
+            SELECT 
+                Id, Title, Description, StatusId,
+                CreatedAt, UpdatedAt, ParentId,
+                ToDo, CategoryId
+            FROM Issues
+            WHERE 1=1";
+
+            if (categoryId.HasValue) {
+                sql += " AND CategoryId = @CategoryId";
+            }
+            if (statusId.HasValue) {
+                sql += " AND StatusId = @StatusId";
+            }
+
+            using var con = new SqliteConnection(DataSource);
+            using var cmd = new SqliteCommand(sql, con);
+            if (categoryId.HasValue) {
+                cmd.Parameters.AddWithValue("@CategoryId", categoryId.Value);
+            }
+            if (statusId.HasValue) {
+                cmd.Parameters.AddWithValue("@StatusId", statusId.Value);
+            }
+            con.Open();
+            using var reader = cmd.ExecuteReader();
+            issues.Clear();
+            while (reader.Read()) {
+                issues.Add(CreateIssue(reader));
+            }
         }
 
-        public static void LoadClosedIssues(ObservableCollection<Issue> issues) {
-            LoadIssuesWhereIsClosedEquals(issues, true);
+        public static void GetOpenIssues(ObservableCollection<Issue> issues) {
+            GetIssuesIsClosed(issues, false);
         }
 
-        private static void LoadIssuesWhereIsClosedEquals(ObservableCollection<Issue> issues, bool isClosed) {
+        public static void GetClosedIssues(ObservableCollection<Issue> issues) {
+            GetIssuesIsClosed(issues, true);
+        }
+
+        private static void GetIssuesIsClosed(ObservableCollection<Issue> issues, bool isClosed) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
             issues.Clear();
