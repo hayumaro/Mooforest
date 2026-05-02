@@ -15,10 +15,6 @@ namespace Mooforest.Features.IssueManagement {
                 MessageBox.Show("内容を入力してください");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(InputToDo.Text)) {
-                MessageBox.Show("次にやることを入力してください");
-                return;
-            }
             if (InputCategory.SelectedIndex == -1) {
                 MessageBox.Show("カテゴリーを選んでください");
                 return;

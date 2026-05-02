@@ -26,11 +26,6 @@ namespace Mooforest.Features.IssueManagement {
                 MessageBox.Show("内容を書いてください");
                 return;
             }
-            // 完了済みの課題は次にやることが空欄でもよい
-            if (!status.IsClosed && string.IsNullOrWhiteSpace(InputToDo.Text)) {
-                MessageBox.Show("次にやることを書いてください");
-                return;
-            }
             IssueManagementModel.AddHistory(OwnIssue, status, InputDescription.Text, InputToDo.Text);
             Close();
         }
