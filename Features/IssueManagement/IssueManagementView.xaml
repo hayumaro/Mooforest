@@ -28,10 +28,10 @@
                 <StackPanel>
                     <Label Content="状態" Margin="16,0"/>
                     <StackPanel Orientation="Horizontal">
-                        <ComboBox x:Name="InputStatus" Margin="16,0,0,0" Width="120" SelectionChanged="FilterChanged"
-                            ItemsSource="{x:Static local:IssueManagementModel.Statuses}" 
-                            DisplayMemberPath="Name"
-                            SelectedValuePath="Id"/>
+                        <ComboBox x:Name="InputStatus" Margin="16,0,0,0" Width="120" SelectionChanged="FilterChanged">
+                            <ComboBoxItem Content="オープン"/>
+                            <ComboBoxItem Content="クローズ"/>
+                        </ComboBox>
                         <Button Content="×" Style="{StaticResource ClearButton}" Margin="0,0,8,0" Click="ClearStatus_Click"/>
                     </StackPanel>
                 </StackPanel>

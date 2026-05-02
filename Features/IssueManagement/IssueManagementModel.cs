@@ -50,55 +50,31 @@ namespace Mooforest.Features.IssueManagement {
             return reader.Read() ? CreateIssue(reader) : null;
         }
 
-        public static void GetIssues(ObservableCollection<Issue> issues, int? categoryId, int? statusId) {
+        public static void GetIssues(ObservableCollection<Issue> issues, bool isClosed, int? categoryId) {
+            // Prepare SQL statement
             var sql = @"
-            SELECT 
-                Id, Title, Description, StatusId,
-                CreatedAt, UpdatedAt, ParentId,
-                ToDo, CategoryId
+            SELECT Issues.*
             FROM Issues
-            WHERE 1=1";
-
+            INNER JOIN Statuses ON Issues.StatusId = Statuses.Id
+            WHERE Statuses.IsClosed = @IsClosed";
             if (categoryId.HasValue) {
                 sql += " AND CategoryId = @CategoryId";
-            }
-            if (statusId.HasValue) {
-                sql += " AND StatusId = @StatusId";
             }
 
             using var con = new SqliteConnection(DataSource);
             using var cmd = new SqliteCommand(sql, con);
+
+            // Build command
+            cmd.Parameters.AddWithValue("@IsClosed", isClosed ? 1 : 0);
             if (categoryId.HasValue) {
                 cmd.Parameters.AddWithValue("@CategoryId", categoryId.Value);
             }
-            if (statusId.HasValue) {
-                cmd.Parameters.AddWithValue("@StatusId", statusId.Value);
-            }
+
             con.Open();
             using var reader = cmd.ExecuteReader();
+
+            // Make issue list
             issues.Clear();
-            while (reader.Read()) {
-                issues.Add(CreateIssue(reader));
-            }
-        }
-
-        public static void GetOpenIssues(ObservableCollection<Issue> issues) {
-            GetIssuesIsClosed(issues, false);
-        }
-
-        public static void GetClosedIssues(ObservableCollection<Issue> issues) {
-            GetIssuesIsClosed(issues, true);
-        }
-
-        private static void GetIssuesIsClosed(ObservableCollection<Issue> issues, bool isClosed) {
-            using var con = new SqliteConnection(DataSource);
-            con.Open();
-            issues.Clear();
-            using var cmd = new SqliteCommand(@"Select Issues.* From Issues
-                Inner Join Statuses On Issues.StatusId = Statuses.Id
-                Where Statuses.IsClosed = @IsClosed;", con);
-            cmd.Parameters.AddWithValue("@IsClosed", isClosed ? 1 : 0);
-            using var reader = cmd.ExecuteReader();
             while (reader.Read()) {
                 issues.Add(CreateIssue(reader));
             }

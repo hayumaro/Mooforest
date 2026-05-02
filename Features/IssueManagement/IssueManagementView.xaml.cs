@@ -10,14 +10,23 @@ namespace Mooforest.Features.IssueManagement {
         public IssueManagementView() {
             InitializeComponent();
             IssueManagementModel.Initialize();
-            IssueManagementModel.GetOpenIssues(Issues);
+            IssueManagementModel.GetIssues(Issues, false, null);
             DataContext = this;
             InputCategory.SelectedIndex = -1;
             InputStatus.SelectedIndex = 0;
         }
 
         public void Reload() {
-            IssueManagementModel.GetIssues(Issues, (int?)InputCategory.SelectedValue, (int?)InputStatus.SelectedValue);
+            GetFilteredIssues();
+        }
+
+        private bool StatusFilterIsClosed() {
+            if (InputStatus.SelectedItem is not ComboBoxItem item) return true;
+            return item.Content.ToString() == "クローズ";
+        }
+
+        private void GetFilteredIssues() {
+            IssueManagementModel.GetIssues(Issues, StatusFilterIsClosed(), (int?)InputCategory.SelectedValue);
         }
 
         private void ClearCategory_Click(object sender, RoutedEventArgs e) {
@@ -34,7 +43,7 @@ namespace Mooforest.Features.IssueManagement {
         }
 
         private void FilterChanged(object sender, EventArgs e) {
-            IssueManagementModel.GetIssues(Issues, (int?)InputCategory.SelectedValue, (int?)InputStatus.SelectedValue);
+            GetFilteredIssues();
         }
 
         private void Title_Click(object sender, RoutedEventArgs e) {

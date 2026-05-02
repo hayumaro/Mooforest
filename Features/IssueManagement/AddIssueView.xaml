@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Mooforest.Features.IssueManagement"
         mc:Ignorable="d"
-        Title="課題を追加する" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="課題を追加する" Height="450" Width="800" WindowStartupLocation="CenterScreen"
+        FontFamily="LINE Seed JP" FontSize="14">
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
