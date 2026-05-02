@@ -8,27 +8,31 @@
         Title="Mooforest" Height="720" Width="1440" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="48"/>
+            <ColumnDefinition Width="56"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
-            <ListView x:Name="Menu" SelectionChanged="Menu_SelectionChanged" BorderThickness="0">
+            <ListView x:Name="Menu" SelectionChanged="Menu_SelectionChanged" BorderThickness="0"
+                      ItemsSource="{Binding FeatureInfos}"
+                      SelectedValuePath="Name">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
-                        <Setter Property="FontSize" Value="20"/>
-                        <Setter Property="Foreground" Value="{StaticResource BrushGray800}"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="ListViewItem">
-                                    <Border x:Name="Menu_Border" Background="Transparent" Padding="0,8,0,8" BorderBrush="{StaticResource BrushGray800}">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                                    <Border x:Name="MenuBorder"
+                                            Background="Transparent"
+                                            Padding="0,8,0,8"
+                                            BorderThickness="4,0,0,0"
+                                            BorderBrush="Transparent">
+                                        <ContentPresenter/>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="Menu_Border" Property="BorderThickness" Value="4,0,0,0"/>
+                                            <Setter TargetName="MenuBorder" Property="BorderBrush" Value="{StaticResource BrushGray800}"/>
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Menu_Border" Property="Background" Value="{StaticResource BrushGray200}"/>
+                                            <Setter TargetName="MenuBorder" Property="Background" Value="{StaticResource BrushGray200}"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -36,10 +40,11 @@
                         </Setter>
                     </Style>
                 </ListView.ItemContainerStyle>
-
-                <ListViewItem Tag="IssueManagement" Content="📓"/>
-                <ListViewItem Tag="Schedule" Content="📅"/>
-                <ListViewItem Tag="Memo" Content="🗒️"/>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding ImagePath}" Width="40" Height="40"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
         </Grid>
 

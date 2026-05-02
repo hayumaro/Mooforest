@@ -149,7 +149,7 @@ namespace Mooforest.Features.IssueManagement {
             cmd.Parameters.Clear();
 
             // Update Issue
-            BuildUpdateIssue(cmd, issue.Id, issue.Title, issue.Description, status.Id, toDo);
+            BuildUpdateIssue(cmd, issue.Id, issue.Title, issue.Description, status.Id, toDo, issue.CategoryId);
             try {
                 cmd.ExecuteNonQuery();
             } catch (Exception) {
@@ -159,26 +159,27 @@ namespace Mooforest.Features.IssueManagement {
             cmd.Transaction.Commit();
         }
 
-        public static void UpdateIssue(int issueId, string title, string description, int statusId, string toDo) {
+        public static void UpdateIssue(int issueId, string title, string description, int statusId, string toDo, int categoryId) {
             using var con = new SqliteConnection(DataSource);
             con.Open();
             using var cmd = new SqliteCommand();
             cmd.Connection = con;
 
-            BuildUpdateIssue(cmd, issueId, title, description, statusId, toDo);
+            BuildUpdateIssue(cmd, issueId, title, description, statusId, toDo, categoryId);
             cmd.ExecuteNonQuery();
         }
 
-        private static void BuildUpdateIssue(SqliteCommand cmd, int issueId, string title, string description, int statusId, string toDo) {
+        private static void BuildUpdateIssue(SqliteCommand cmd, int issueId, string title, string description, int statusId, string toDo, int categoryId) {
             cmd.CommandText = @"
                 Update Issues
-				Set Title=@Title, Description=@Description, StatusId=@StatusId, UpdatedAt=@UpdatedAt, ToDo=@ToDo
+				Set Title=@Title, Description=@Description, StatusId=@StatusId, UpdatedAt=@UpdatedAt, ToDo=@ToDo, CategoryId=@CategoryId
 				Where Id=@Id";
             cmd.Parameters.AddWithValue("@Title", title);
             cmd.Parameters.AddWithValue("@Description", description);
             cmd.Parameters.AddWithValue("@StatusId", statusId);
             cmd.Parameters.AddWithValue("@UpdatedAt", DateTime.Now.ToString("yyyy-MM-dd"));
             cmd.Parameters.AddWithValue("@ToDo", toDo);
+            cmd.Parameters.AddWithValue("@CategoryId", categoryId);
             cmd.Parameters.AddWithValue("@Id", issueId);
 
         }

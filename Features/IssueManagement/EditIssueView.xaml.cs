@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 
 namespace Mooforest.Features.IssueManagement {
     public partial class EditIssueView : Window {
@@ -17,24 +16,11 @@ namespace Mooforest.Features.IssueManagement {
             InputTitle.Text = OwnIssue.Title;
             InputDescription.Text = OwnIssue.Description;
             InputToDo.Text = OwnIssue.ToDo;
-            InputStatus.SelectedItem = IssueManagementModel.Statuses.FirstOrDefault(x => x.Id == OwnIssue.StatusId);
-            InputCategory.SelectedItem = IssueManagementModel.Categories.FirstOrDefault(x => x.Id == OwnIssue.CategoryId);
-        }
-
-        private int SelectedStatusId() {
-            return (int)((ComboBoxItem)InputStatus.SelectedItem).Tag;
+            InputStatus.SelectedValue = OwnIssue.StatusId;
+            InputCategory.SelectedValue = OwnIssue.CategoryId;
         }
 
         private void EditIssue_Click(object sender, RoutedEventArgs e) {
-            var titleChanged = InputTitle.Text != OwnIssue.Title;
-            var descChanged = InputDescription.Text != OwnIssue.Description;
-            var toDoChanged = InputToDo.Text != OwnIssue.ToDo;
-            var statusChanged = SelectedStatusId() != OwnIssue.StatusId;
-
-            if (!titleChanged && !descChanged && !toDoChanged && !statusChanged) {
-                MessageBox.Show("何も変更されていません");
-                return;
-            }
             if (string.IsNullOrWhiteSpace(InputTitle.Text)) {
                 MessageBox.Show("タイトルを空欄にはできません");
                 return;
@@ -43,12 +29,13 @@ namespace Mooforest.Features.IssueManagement {
                 MessageBox.Show("説明を空欄にはできません");
                 return;
             }
-            var status = IssueManagementModel.Statuses.FirstOrDefault(x => x.Id == SelectedStatusId())!;
-            if (!status.IsClosed && string.IsNullOrWhiteSpace(InputToDo.Text)) {
-                MessageBox.Show("完了していない課題はToDoを入力してください");
-                return;
+            if (InputStatus.SelectedValue is not int statusId) {
+                statusId = OwnIssue.StatusId;
             }
-            IssueManagementModel.UpdateIssue(OwnIssue.Id, InputTitle.Text, InputDescription.Text, status.Id, InputToDo.Text);
+            if (InputCategory.SelectedValue is not int categoryId) {
+                categoryId = OwnIssue.CategoryId;
+            }
+            IssueManagementModel.UpdateIssue(OwnIssue.Id, InputTitle.Text, InputDescription.Text, statusId, InputToDo.Text, categoryId);
             Close();
         }
     }
