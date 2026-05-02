@@ -9,6 +9,7 @@ namespace Mooforest {
 
         public Features.IssueManagement.IssueManagementView? ImInstance;
         public Features.Memo.MemoView? MemoInstance;
+        public Features.Schedule.ScheduleView? ScheduleInstance;
 
         public MainWindow() {
             InitializeComponent();
@@ -19,7 +20,7 @@ namespace Mooforest {
                 new FeatureInfo("Memo", new Uri("pack://application:,,,/Images/Memo.png", UriKind.Absolute)),
                 new FeatureInfo("Diary", new Uri("pack://application:,,,/Images/Diary.png", UriKind.Absolute)),
             ];
-            Menu.SelectedIndex = 0;
+            Menu.SelectedIndex = 1;
             DataContext = this;
         }
 
@@ -31,6 +32,8 @@ namespace Mooforest {
                     FeatureView.Content = ImInstance;
                     break;
                 case "Schedule":
+                    ScheduleInstance ??= new Features.Schedule.ScheduleView();
+                    FeatureView.Content = ScheduleInstance;
                     break;
                 case "Routine":
                     break;
