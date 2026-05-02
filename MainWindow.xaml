@@ -42,7 +42,7 @@
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Image Source="{Binding ImagePath}" Width="40" Height="40"/>
+                        <Image Source="{Binding ImagePath}" Width="40" Height="40" Opacity="0.8"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
