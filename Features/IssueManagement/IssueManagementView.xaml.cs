@@ -62,10 +62,18 @@ namespace Mooforest.Features.IssueManagement {
         }
 
         private void AddIssue_Click(object sender, RoutedEventArgs e) {
-            var addIssueView = new AddIssueView((int?)InputCategory.SelectedValue) {
+            var view = new AddIssueView((int?)InputCategory.SelectedValue) {
                 Owner = Application.Current.MainWindow as MainWindow
             };
-            addIssueView.Show();
+            view.Show();
+        }
+
+        private void EditCategory_Click(object sender, RoutedEventArgs e) {
+            var view = new EditCategoryView() {
+                Owner = Application.Current.MainWindow as MainWindow
+            };
+            view.Show();
+            GetFilteredIssues();
         }
     }
 }

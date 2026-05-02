@@ -14,11 +14,15 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
                 <StackPanel>
                     <Label Content="カテゴリー" Margin="16,0"/>
                     <StackPanel Orientation="Horizontal">
-                        <ComboBox x:Name="InputCategory" Margin="16,0,0,0"  Width="120" SelectionChanged="FilterChanged"
+                        <ComboBox x:Name="InputCategory" Width="200" SelectionChanged="FilterChanged"
                             ItemsSource="{x:Static local:IssueManagementModel.Categories}"
                             DisplayMemberPath="Name"
                             SelectedValuePath="Id"/>
@@ -35,6 +39,9 @@
                         <Button Content="×" Style="{StaticResource ClearButton}" Margin="0,0,8,0" Click="ClearStatus_Click"/>
                     </StackPanel>
                 </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                <Button Style="{StaticResource SecondaryButton}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="カテゴリーを編集する" Padding="16,0" Margin="16,0" Click="EditCategory_Click"/>
                 <Button Style="{StaticResource PrimaryButton}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Content="課題を追加する" Padding="16,0" Click="AddIssue_Click"/>
             </StackPanel>
         </Grid>

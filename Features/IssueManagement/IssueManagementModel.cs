@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace Mooforest.Features.IssueManagement {
 	public record Status(int Id, string Name, int SortOrder, bool IsClosed);
@@ -34,7 +35,7 @@ namespace Mooforest.Features.IssueManagement {
         public static void Initialize() {
 			using var con = new SqliteConnection(DataSource);
 			con.Open();
-			CreateTable(con);
+			CreateTables(con);
 			LoadStatuses(con);
             LoadCategories(con);
         }
@@ -76,6 +77,25 @@ namespace Mooforest.Features.IssueManagement {
             while (reader.Read()) {
                 issues.Add(CreateIssue(reader));
             }
+        }
+
+        public static void AddCategory(string name) {
+            using var con = new SqliteConnection(DataSource);
+            con.Open();
+            using var cmd = new SqliteCommand(@"Insert Into Categories (Name) Values (@Name)", con);
+            cmd.Parameters.AddWithValue("@Name", name);
+            cmd.ExecuteNonQuery();
+            LoadCategories(con);
+        }
+
+        public static void UpdateCategory(int categoryId, string newName) {
+            using var con = new SqliteConnection(DataSource);
+            con.Open();
+            using var cmd = new SqliteCommand(@"Update Categories Set Name=@Name Where Id=@Id", con);
+            cmd.Parameters.AddWithValue("@Name", newName);
+            cmd.Parameters.AddWithValue("@Id", categoryId);
+            cmd.ExecuteNonQuery();
+            LoadCategories(con);
         }
 
         public static ObservableCollection<History> LoadHistories(int issueId) {
@@ -173,7 +193,48 @@ namespace Mooforest.Features.IssueManagement {
             cmd.Parameters.AddWithValue("@StatusId", statusId);
         }
 
-        private static void CreateTable(SqliteConnection con) {
+        // Load Master DB
+        private static void LoadStatuses(SqliteConnection con) {
+            Statuses.Clear();
+            using var cmd = new SqliteCommand(@"Select Id, Name, SortOrder, IsClosed From Statuses", con);
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read()) {
+                var id = reader.GetInt32(0);
+                var name = reader.GetString(1);
+                var sortOrder = reader.GetInt32(2);
+                var isClosed = reader.GetInt32(3) == 1;
+                Statuses.Add(new Status(id, name, sortOrder, isClosed));
+            }
+        }
+
+        private static void LoadCategories(SqliteConnection con) {
+            Categories.Clear();
+            using var cmd = new SqliteCommand(@"Select Id, Name From Categories", con);
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read()) {
+                var id = reader.GetInt32(0);
+                var name = reader.GetString(1);
+                Categories.Add(new Category(id, name));
+            }
+        }
+
+        // readerの先頭行からIssueインスタンスを作る
+        private static Issue CreateIssue(SqliteDataReader reader) {
+            var id = reader.GetInt32(0);
+            var title = reader.GetString(1);
+            var desc = reader.GetString(2);
+            var statusId = reader.GetInt32(3);
+            var status = Statuses.FirstOrDefault(x => x.Id == statusId)!.Name;
+            var createdAt = DateTime.ParseExact(reader.GetString(4), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var updatedAt = DateTime.ParseExact(reader.GetString(5), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            int? parentId = reader.IsDBNull(6) ? null : reader.GetInt32(6);
+            string? toDo = reader.IsDBNull(7) ? null : reader.GetString(7);
+            int categoryId = reader.GetInt32(8);
+            var category = Categories.FirstOrDefault(x => x.Id == categoryId)!.Name;
+            return new Issue(id, title, desc, statusId, status, createdAt, updatedAt, parentId, toDo, categoryId, category);
+        }
+
+        private static void CreateTables(SqliteConnection con) {
 			// Statuses
 			using var cmd = new SqliteCommand(@"Create Table If Not Exists
             ""Statuses"" (
@@ -252,47 +313,6 @@ namespace Mooforest.Features.IssueManagement {
                 throw;
             }
             cmd.Transaction.Commit();
-        }
-
-        // Load Master DB
-        private static void LoadStatuses(SqliteConnection con) {
-			Statuses.Clear();
-			using var cmd = new SqliteCommand(@"Select Id, Name, SortOrder, IsClosed From Statuses", con);
-			using var reader = cmd.ExecuteReader();
-			while (reader.Read()) {
-				var id = reader.GetInt32(0);
-				var name = reader.GetString(1);
-				var sortOrder = reader.GetInt32(2);
-				var isClosed = reader.GetInt32(3) == 1;
-                Statuses.Add(new Status(id, name, sortOrder, isClosed));
-			}
-		}
-
-        private static void LoadCategories(SqliteConnection con) {
-            Categories.Clear();
-            using var cmd = new SqliteCommand(@"Select Id, Name From Categories", con);
-            using var reader = cmd.ExecuteReader();
-            while (reader.Read()) {
-                var id = reader.GetInt32(0);
-                var name = reader.GetString(1);
-                Categories.Add(new Category(id, name));
-            }
-        }
-
-        // readerの先頭行からIssueインスタンスを作る
-        private static Issue CreateIssue(SqliteDataReader reader) {
-            var id = reader.GetInt32(0);
-            var title = reader.GetString(1);
-            var desc = reader.GetString(2);
-            var statusId = reader.GetInt32(3);
-            var status = Statuses.FirstOrDefault(x => x.Id == statusId)!.Name;
-            var createdAt = DateTime.ParseExact(reader.GetString(4), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            var updatedAt = DateTime.ParseExact(reader.GetString(5), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            int? parentId = reader.IsDBNull(6) ? null : reader.GetInt32(6);
-            string? toDo = reader.IsDBNull(7) ? null : reader.GetString(7);
-            int categoryId = reader.GetInt32(8);
-            var category = Categories.FirstOrDefault(x => x.Id == categoryId)!.Name;
-            return new Issue(id, title, desc, statusId, status, createdAt, updatedAt, parentId, toDo, categoryId, category);
         }
     }
 }
