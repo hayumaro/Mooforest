@@ -17,8 +17,8 @@ namespace Mooforest.Features.IssueManagement {
             InputTitle.Text = OwnIssue.Title;
             InputDescription.Text = OwnIssue.Description;
             InputToDo.Text = OwnIssue.ToDo;
-            var status = IssueManagementModel.Statuses.FirstOrDefault(x => x.Id == OwnIssue.Id);
-            InputStatus.SelectedItem = status;
+            InputStatus.SelectedItem = IssueManagementModel.Statuses.FirstOrDefault(x => x.Id == OwnIssue.StatusId);
+            InputCategory.SelectedItem = IssueManagementModel.Categories.FirstOrDefault(x => x.Id == OwnIssue.CategoryId);
         }
 
         private int SelectedStatusId() {
