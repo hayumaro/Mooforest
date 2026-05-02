@@ -24,6 +24,8 @@ namespace Mooforest.Features.IssueManagement {
                 return;
             }
             IssueManagementModel.InsertIssue(InputTitle.Text, InputDescription.Text, InputToDo.Text, (int)InputCategory.SelectedValue);
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
+            mainWindow.ImInstance?.Reload();
             Close();
         }
     }

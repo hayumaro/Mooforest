@@ -28,7 +28,7 @@ namespace Mooforest.Features.IssueManagement
         private void Reload() {
             OwnIssue = IssueManagementModel.GetIssue(OwnIssue.Id)!;
             var mainWindow = (MainWindow)Application.Current.MainWindow;
-            mainWindow.ImInstance.Reload();
+            mainWindow.ImInstance?.Reload();
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e) {
