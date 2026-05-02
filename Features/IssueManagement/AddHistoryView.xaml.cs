@@ -12,8 +12,7 @@ namespace Mooforest.Features.IssueManagement {
 
             // Initialize UIs
             Title += $"{OwnIssue.Title} ({OwnIssue.Id})";
-            var status = IssueManagementModel.Statuses.FirstOrDefault(x => x.Id == OwnIssue.Id);
-            InputStatus.SelectedItem = status;
+            InputStatus.SelectedItem = IssueManagementModel.Statuses.FirstOrDefault(x => x.Id == OwnIssue.StatusId);
         }
 
         private void AddHistoryClick(object sender, RoutedEventArgs e) {
