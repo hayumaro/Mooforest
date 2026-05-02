@@ -1,8 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Globalization;
-using System.Windows.Input;
 
 namespace Mooforest.Features.IssueManagement {
 	public record Status(int Id, string Name, int SortOrder, bool IsClosed);

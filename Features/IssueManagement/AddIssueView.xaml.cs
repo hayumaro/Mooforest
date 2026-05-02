@@ -2,8 +2,9 @@
 
 namespace Mooforest.Features.IssueManagement {
     public partial class AddIssueView : Window {
-        public AddIssueView() {
+        public AddIssueView(int? selectedCategoryId) {
             InitializeComponent();
+            InputCategory.SelectedValue = selectedCategoryId;
         }
 
         private void AddIssue_Click(object sender, RoutedEventArgs e) {
