@@ -20,10 +20,13 @@
                 <RowDefinition Height="16"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Content="メモ一覧" FontWeight="Bold"/>
-            <ListBox Grid.Row="2" x:Name="MemoList" ItemsSource="{Binding Memos}"
+            <Label Grid.Row="0" Content="メモ一覧"/>
+            <ListBox Grid.Row="2" x:Name="MemoList"
+                     ItemsSource="{Binding Memos}"
+                     SelectedValuePath="Id"
                      SelectionMode="Single"
-                     SelectionChanged="MenuList_SelectionChanged">
+                     BorderThickness="0"
+                     SelectionChanged="MemoListSelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Title}" Foreground="{StaticResource BrushGray800}" Padding="8">
@@ -51,11 +54,10 @@
                 <RowDefinition Height="12"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Content="タイトル" FontWeight="Bold"/>
-            <TextBox Grid.Row="2" x:Name="MemoTitle" PreviewKeyDown="TextBox_PreviewKeyDown"/>
-            <Label Grid.Row="4" Content="内容" FontWeight="Bold"/>
-            <TextBox Grid.Row="6" x:Name="MemoContent" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"
-                     PreviewKeyDown="TextBox_PreviewKeyDown"/>
+            <Label Grid.Row="0" Content="タイトル"/>
+            <TextBox Grid.Row="2" x:Name="MemoTitle" Style="{StaticResource SingleLineTextBox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
+            <Label Grid.Row="4" Content="内容"/>
+            <TextBox Grid.Row="6" x:Name="MemoContent" Style="{StaticResource MultiLineTextBox}" PreviewKeyDown="TextBox_PreviewKeyDown"/>
         </Grid>
     </Grid>
 </UserControl>

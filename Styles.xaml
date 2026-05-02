@@ -172,7 +172,7 @@
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Height" Value="34"/>
     </Style>
-    
+
     <!-- DataGrid -->
     <Style TargetType="DataGrid">
         <Setter Property="AutoGenerateColumns" Value="False"/>
