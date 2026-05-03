@@ -10,9 +10,7 @@
 
   <ItemGroup>
     <None Remove="Images\Diary.png" />
-    <None Remove="Images\Memo.png" />
     <None Remove="Images\Routine.png" />
-    <None Remove="Images\Schedule.png" />
     <None Remove="lavender.png" />
   </ItemGroup>
 
@@ -27,13 +25,7 @@
     <Resource Include="Images\IssueManagement.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\Memo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Images\Routine.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\Schedule.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
