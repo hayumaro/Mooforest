@@ -7,6 +7,29 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              FontFamily="LINE Seed JP" FontSize="14">
+    <UserControl.Resources>
+        <Style x:Key="ScheduleItemButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource BrushGray900}"/>
+            <EventSetter Event="Click" Handler="ScheduleItemOnClick"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{StaticResource BrushGreen100}"
+                                BorderBrush="{StaticResource BrushGreen300}"
+                                BorderThickness="1"
+                                Opacity="0.6"
+                                Padding="{TemplateBinding Padding}">
+                            <TextBlock Text="{TemplateBinding Content}"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       Margin="5"
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Ink;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -26,49 +25,42 @@ namespace Mooforest.Features.Schedule {
             "21:00",
         ];
 
-        private const int HalfHourHeight = 20;
-        private const int HourHeight = HalfHourHeight * 2;
-        private const int DayBeginHour = 7;
-        private readonly int TotalTimelineHeight = TimeSlots.Count * HourHeight;
+        const int HalfHourHeight = 20;
+        const int HourHeight = HalfHourHeight * 2;
+        const int DayBeginHour = 7;
+        readonly int TotalTimelineHeight = TimeSlots.Count * HourHeight;
+        public List<ScheduleItem> Schedules = [];
 
         public ScheduleView() {
             InitializeComponent();
             DataContext = this;
             TimeLineContainer.Height = TotalTimelineHeight;
             ScheduleDateLabel.Content = DateTime.Now.ToShortDateString();
-            var schedules = new List<ScheduleItem> {
-                new("会議", DateTime.Today.AddHours(9), DateTime.Today.AddHours(10.5)),
-                new("開発作業", DateTime.Today.AddHours(11), DateTime.Today.AddHours(13)),
-            };
+            Schedules.Add(new("会議", DateTime.Today.AddHours(9), DateTime.Today.AddHours(10.5)));
+            Schedules.Add(new("開発作業", DateTime.Today.AddHours(11), DateTime.Today.AddHours(13)));
             GridCanvas.Loaded += (s, e) => {
                 DrawGridLines();
-                RenderSchedules(schedules);
+                RenderSchedules();
             };
         }
 
-        void RenderSchedules(List<ScheduleItem> schedules) {
+        void RenderSchedules() {
             ScheduleItemCanvas.Children.Clear();
-
-            foreach (var item in schedules) {
-                var top = (item.Begin.Hour - DayBeginHour) * HourHeight + item.Begin.Minute * HalfHourHeight;
-                var height = (item.End - item.Begin).TotalMinutes * (2.0 / 3.0);
-                var border = new Border {
+            foreach (var item in Schedules) {
+                var button = new Button {
                     Width = ScheduleItemCanvas.ActualWidth,
-                    Height = height,
-                    Background = (SolidColorBrush)FindResource("BrushGreen50"),
-                    BorderThickness = new Thickness(1),
-                    BorderBrush = (SolidColorBrush)FindResource("BrushGreen300"),
-                    Opacity = 0.6,
-                    Child = new TextBlock {
-                        Text = item.Title,
-                        Margin = new Thickness(5),
-                        Foreground = Brushes.Black
-                    }
+                    Height = (int)((item.End - item.Begin).TotalMinutes * (2.0 / 3.0)),
+                    Style = (Style)FindResource("ScheduleItemButton"),
+                    Tag = item,
+                    Content = item.Title,
                 };
-                Canvas.SetTop(border, top);
-                Canvas.SetLeft(border, 0);
-                ScheduleItemCanvas.Children.Add(border);
+                Canvas.SetTop(button, (item.Begin.Hour - DayBeginHour) * HourHeight + item.Begin.Minute * HalfHourHeight);
+                Canvas.SetLeft(button, 0);
+                ScheduleItemCanvas.Children.Add(button);
             }
+        }
+
+        void ScheduleItemOnClick(object sender, RoutedEventArgs e) {
         }
 
         void DrawGridLines() {
